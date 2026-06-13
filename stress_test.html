@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compressive Stress Report - E-JUST Lab Standards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains+Mono', monospace; }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: white !important; padding: 0 !important; }
+            .report-card { border: 1px solid #d1d5db !important; box-shadow: none !important; }
+            input, select { border-bottom: 1px solid #e2e8f0 !important; appearance: none; }
+        }
+
+        .bg-ejust-dark { background-color: #0f172a; }
+        .border-ejust { border-color: #1e3a8a; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8 text-slate-900">
+
+    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-slate-200 report-card">
+        
+        <!-- Header Section -->
+        <div class="bg-slate-900 px-8 py-6 border-b-4 border-blue-800">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-white tracking-tight">COMPRESSIVE STRENGTH REPORT</h1>
+                    <p class="text-blue-400 text-xs font-semibold tracking-[0.15em] mt-1 uppercase">
+                        Statistical Analysis & Stress Calculation
+                    </p>
+                </div>
+                <div class="text-right">
+                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Authorized Laboratory Engineer</p>
+                    <p class="text-white text-xs font-medium">Mohamed Abdelazim</p>
+                    <p class="text-slate-400 text-[9px]">E-JUST University, Egypt</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metadata Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 bg-slate-50/50 border-b border-slate-200">
+            <div class="md:col-span-1">
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Project / Sample ID</label>
+                <input type="text" id="projName" oninput="autoSaveData()" placeholder="e.g. Concrete Grade C30" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 font-semibold transition-colors">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Testing Date</label>
+                <input type="date" id="testDate" oninput="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 transition-colors">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Specimen Geometry</label>
+                <select id="dimensions" onchange="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 font-semibold transition-colors cursor-pointer">
+                    <optgroup label="Cubes">
+                        <option value="150x150" selected>Cube: 150 × 150 mm</option>
+                        <option value="100x100">Cube: 100 × 100 mm</option>
+                        <option value="70x70">Cube: 70 × 70 mm</option>
+                        <option value="50x50">Cube: 50 × 50 mm</option>
+                    </optgroup>
+                    <optgroup label="Cylinders">
+                        <option value="cyl150">Cylinder: Ø150 mm</option>
+                        <option value="cyl100">Cylinder: Ø100 mm</option>
+                    </optgroup>
+                    <optgroup label="Others">
+                        <option value="40x40">Prism: 40 × 40 mm</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+
+        <div class="p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Left Side: Input Table -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+                    <div class="h-4 w-1 bg-blue-700"></div>
+                    <h3 class="text-xs font-bold uppercase text-slate-700">Sample Load Inputs (kN)</h3>
+                </div>
+                
+                <div class="overflow-hidden border border-slate-200 rounded-lg shadow-sm">
+                    <table class="w-full text-xs text-left">
+                        <thead class="bg-slate-800 text-slate-200 uppercase text-[9px] tracking-widest">
+                            <tr>
+                                <th class="p-2 text-center w-12">ID</th>
+                                <th class="p-2">Maximum Load (kN)</th>
+                                <th class="p-2 text-center w-12 no-print">ID</th>
+                                <th class="p-2">Maximum Load (kN)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100" id="inputTableBody">
+                            <!-- JS generates 6 rows (2 columns each to make 12 total) -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex gap-3 no-print">
+                    <button onclick="calculateStress()" class="flex-1 bg-slate-900 hover:bg-black text-white font-bold py-3 px-4 rounded-lg transition shadow-lg text-xs tracking-widest uppercase">
+                        Process and Calculate
+                    </button>
+                    <button onclick="clearAllFields()" class="px-6 py-3 border border-slate-200 text-slate-400 hover:text-red-600 transition text-xs font-bold uppercase rounded-lg">
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side: Calculations & Results -->
+            <div class="lg:col-span-5 space-y-6">
+                <div id="resultPlaceholder" class="h-full flex flex-col items-center justify-center text-center p-12 border-2 border-dashed border-slate-100 rounded-xl">
+                    <div class="text-slate-300 mb-4">
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Awaiting Load Data</p>
+                </div>
+
+                <div id="resultDisplay" class="hidden space-y-6">
+                    <!-- Area & Analysis -->
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Cross-Section Area</span>
+                                <span id="displayArea" class="text-lg font-mono font-bold text-slate-800">0.00 mm²</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Samples Validated</span>
+                                <span id="finalSampleCount" class="text-lg font-mono font-bold text-blue-700">0 / 0</span>
+                            </div>
+                        </div>
+
+                        <!-- Statistical Audit -->
+                        <div class="space-y-3">
+                            <div class="p-3 bg-white border border-slate-200 rounded text-[11px]">
+                                <div class="flex justify-between text-slate-500 mb-1 uppercase font-bold text-[9px]"><span>Cycle 1 Audit</span><span id="auditInitialAvg">0.00 kN</span></div>
+                                <div id="cycle1Exclusions" class="text-slate-400 italic">No outliers detected.</div>
+                            </div>
+                            <div class="p-3 bg-white border border-slate-200 rounded text-[11px]">
+                                <div class="flex justify-between text-slate-500 mb-1 uppercase font-bold text-[9px]"><span>Cycle 2 Audit</span><span id="auditCycle2Avg">0.00 kN</span></div>
+                                <div id="cycle2Exclusions" class="text-slate-400 italic">No outliers detected.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Result Cards -->
+                    <div class="space-y-3">
+                        <div class="bg-blue-900 p-5 rounded-xl shadow-inner text-white">
+                            <span class="text-[10px] font-bold text-blue-300 uppercase tracking-widest block mb-1">Compressive Strength (MPa)</span>
+                            <div class="flex items-baseline gap-2">
+                                <span id="stressNmm" class="text-4xl font-black tracking-tighter">0.00</span>
+                                <span class="text-sm font-bold text-blue-300">N/mm²</span>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+                            <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Metric Strength</span>
+                            <div class="flex items-baseline gap-2">
+                                <span id="stressKgcm" class="text-2xl font-black text-emerald-700 tracking-tighter">0.00</span>
+                                <span class="text-xs font-bold text-emerald-600">Kg/cm²</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex flex-col md:flex-row justify-between items-center p-8 border-t border-slate-100 gap-4 no-print">
+            <p class="text-[10px] text-slate-500 font-medium text-center md:text-left leading-relaxed">
+                Provided by Mohamed Abdelazim. Lab Engineer,<br>
+                Egypt-Japan university for science and technology.
+            </p>
+            <div class="flex gap-3">
+                <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold py-2 px-5 rounded transition flex items-center gap-2 uppercase tracking-wider">
+                    Export CSV
+                </button>
+                <button onclick="window.print()" class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold py-2 px-6 rounded transition shadow-md uppercase tracking-wider">
+                    Print Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Footer -->
+    <div class="hidden print:block mt-8 text-[9px] text-slate-400 text-center italic">
+        Report Generated by Mohamed Abdelazim • E-JUST University Laboratory
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('inputTableBody');
+            for(let i=1; i<=6; i++) {
+                const s1 = i;
+                const s2 = i + 6;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="p-2 text-center bg-slate-50 font-bold text-slate-400 border-r border-slate-100">${s1}</td>
+                    <td class="p-1 border-r border-slate-100"><input type="number" id="load${s1}" step="0.01" class="w-full bg-transparent p-1.5 outline-none font-mono text-sm focus:bg-blue-50 transition"></td>
+                    <td class="p-2 text-center bg-slate-50 font-bold text-slate-400 border-r border-slate-100 no-print">${s2}</td>
+                    <td class="p-1"><input type="number" id="load${s2}" step="0.01" class="w-full bg-transparent p-1.5 outline-none font-mono text-sm focus:bg-blue-50 transition"></td>
+                `;
+                tbody.appendChild(row);
+            }
+            loadSavedData();
+        });
+
+        function calculateStress() {
+            const dimensionType = document.getElementById('dimensions').value;
+            let rawLoads = [];
+            for (let i = 1; i <= 12; i++) {
+                const val = parseFloat(document.getElementById(`load${i}`).value);
+                if (!isNaN(val) && val > 0) rawLoads.push(val);
+            }
+
+            if (rawLoads.length === 0) return alert("Enter load values.");
+
+            // Statistical 2-Cycle Cleanse
+            const getAvg = arr => arr.reduce((a,b) => a+b, 0) / arr.length;
+            
+            // Cycle 1
+            const avg1 = getAvg(rawLoads);
+            let passed1 = [], excl1 = [];
+            rawLoads.forEach(l => {
+                const dev = ((l - avg1) / avg1) * 100;
+                if (Math.abs(dev) <= 20) passed1.push(l);
+                else excl1.push(`${l} (${dev > 0 ? '+' : ''}${dev.toFixed(1)}%)`);
+            });
+
+            // Cycle 2
+            let passed2 = [], excl2 = [], avg2 = 0;
+            if (passed1.length > 0) {
+                avg2 = getAvg(passed1);
+                passed1.forEach(l => {
+                    const dev = ((l - avg2) / avg2) * 100;
+                    if (Math.abs(dev) <= 20) passed2.push(l);
+                    else excl2.push(`${l} (${dev > 0 ? '+' : ''}${dev.toFixed(1)}%)`);
+                });
+            }
+
+            const finalAvgLoad = passed2.length > 0 ? getAvg(passed2) : 0;
+
+            // Geometry
+            let areaMm2 = 0;
+            switch (dimensionType) {
+                case "150x150": areaMm2 = 22500; break;
+                case "100x100": areaMm2 = 10000; break;
+                case "70x70": areaMm2 = 4900; break;
+                case "50x50": areaMm2 = 2500; break;
+                case "40x40": areaMm2 = 1600; break;
+                case "cyl150": areaMm2 = Math.PI * 75 * 75; break;
+                case "cyl100": areaMm2 = Math.PI * 50 * 50; break;
+            }
+
+            const stress = (finalAvgLoad * 1000) / areaMm2;
+
+            // UI Update
+            document.getElementById('displayArea').innerText = areaMm2.toFixed(2) + " mm²";
+            document.getElementById('finalSampleCount').innerText = `${passed2.length} / ${rawLoads.length}`;
+            document.getElementById('auditInitialAvg').innerText = avg1.toFixed(2) + " kN";
+            document.getElementById('cycle1Exclusions').innerHTML = excl1.length ? `<span class="text-red-500 font-bold">Dropped:</span> ${excl1.join(', ')}` : "No outliers detected.";
+            document.getElementById('auditCycle2Avg').innerText = avg2 ? avg2.toFixed(2) + " kN" : "N/A";
+            document.getElementById('cycle2Exclusions').innerHTML = excl2.length ? `<span class="text-red-500 font-bold">Dropped:</span> ${excl2.join(', ')}` : "No outliers detected.";
+            
+            document.getElementById('stressNmm').innerText = stress.toFixed(2);
+            document.getElementById('stressKgcm').innerText = (stress * 10.197).toFixed(2);
+
+            document.getElementById('resultPlaceholder').classList.add('hidden');
+            document.getElementById('resultDisplay').classList.remove('hidden');
+            autoSaveData();
+        }
+
+        function autoSaveData() {
+            const data = {
+                proj: document.getElementById('projName').value,
+                date: document.getElementById('testDate').value,
+                dim: document.getElementById('dimensions').value,
+                loads: Array.from({length: 12}, (_, i) => document.getElementById(`load${i+1}`).value)
+            };
+            localStorage.setItem('EJUST_STRESS_CACHE', JSON.stringify(data));
+        }
+
+        function loadSavedData() {
+            const cache = localStorage.getItem('EJUST_STRESS_CACHE');
+            if (!cache) return;
+            const data = JSON.parse(cache);
+            document.getElementById('projName').value = data.proj || "";
+            document.getElementById('testDate').value = data.date || "";
+            document.getElementById('dimensions').value = data.dim || "150x150";
+            data.loads.forEach((v, i) => document.getElementById(`load${i+1}`).value = v);
+        }
+
+        function exportToCSV() {
+            let csv = "Sample ID,Load (kN),Status\n";
+            for(let i=1; i<=12; i++) {
+                csv += `${i},${document.getElementById('load'+i).value || 0}\n`;
+            }
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Stress_Report_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        function clearAllFields() {
+            if(confirm("Wipe all data?")) {
+                localStorage.removeItem('EJUST_STRESS_CACHE');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

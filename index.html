@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-JUST Lab Information System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .entrance-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .entrance-card:hover { transform: translateY(-8px); border-color: #2563eb; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-900 flex flex-col">
+
+    <!-- Hero Header Section -->
+    <header class="bg-slate-900 text-white pt-16 pb-20 px-6 border-b-8 border-blue-700 shadow-2xl relative overflow-hidden">
+        <!-- Abstract Background Shape -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+        
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end gap-6">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-black tracking-tighter uppercase mb-2">Engineering Lab Suite</h1>
+                    <p class="text-blue-400 text-sm md:text-base font-bold tracking-[0.3em] uppercase">Unified Geotechnical & Quality Control Portal</p>
+                </div>
+                <div class="bg-slate-800/50 backdrop-blur-sm p-6 rounded-2xl border border-slate-700 text-right">
+                    <p class="text-slate-400 text-[10px] uppercase font-black tracking-widest mb-1">Lead Laboratory Engineer</p>
+                    <p class="text-xl font-bold text-white">Mohamed Abdelazim</p>
+                    <p class="text-blue-400 text-xs font-medium uppercase tracking-wider">E-JUST University • Egypt</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Grid (The Large Buttons) -->
+    <main class="max-w-6xl mx-auto px-6 -mt-10 mb-20 flex-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- 01. Sand Cone -->
+            <a href="sand_cone.html" class="entrance-card group bg-white p-10 rounded-3xl shadow-xl border-2 border-transparent flex flex-col items-center text-center">
+                <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.628.285a2 2 0 01-1.963 0l-.63-.285a6 6 0 00-3.86-.517l-2.388.477a2 2 0 00-1.022.547V18a2 2 0 002 2h11a2 2 0 002-2v-2.572z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-3">Sand Cone Density</h3>
+                <p class="text-slate-500 text-sm font-medium leading-relaxed px-4">Field density measurement using AASHTO T 191 / ASTM D1556 standards.</p>
+                <div class="mt-8 text-blue-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Launch Application <span>→</span></div>
+            </a>
+
+            <!-- 02. Compressive Stress -->
+            <a href="stress_test.html" class="entrance-card group bg-white p-10 rounded-3xl shadow-xl border-2 border-transparent flex flex-col items-center text-center">
+                <div class="w-20 h-20 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-slate-900 group-hover:text-white transition-colors duration-300">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-3">Strength Analysis</h3>
+                <p class="text-slate-500 text-sm font-medium leading-relaxed px-4">Compressive stress averager with 2-cycle statistical outlier cleansing.</p>
+                <div class="mt-8 text-blue-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Launch Application <span>→</span></div>
+            </a>
+
+            <!-- 03. Soil Classification -->
+            <a href="soil_class.html" class="entrance-card group bg-white p-10 rounded-3xl shadow-xl border-2 border-transparent flex flex-col items-center text-center">
+                <div class="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-3">Soil Classification</h3>
+                <p class="text-slate-500 text-sm font-medium leading-relaxed px-4">Instant subgrade rating & Group Index via AASHTO M 145 / ASTM D3282.</p>
+                <div class="mt-8 text-blue-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Launch Application <span>→</span></div>
+            </a>
+
+            <!-- 04. Proctor -->
+            <a href="proctor.html" class="entrance-card group bg-white p-10 rounded-3xl shadow-xl border-2 border-transparent flex flex-col items-center text-center">
+                <div class="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-3">Proctor Compaction</h3>
+                <p class="text-slate-500 text-sm font-medium leading-relaxed px-4">MDD and OMC determination with live compaction curve plotting.</p>
+                <div class="mt-8 text-blue-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Launch Application <span>→</span></div>
+            </a>
+
+            <!-- 05. Atterberg -->
+            <a href="atterberg.html" class="entrance-card group bg-white p-10 rounded-3xl shadow-xl border-2 border-transparent flex flex-col items-center text-center">
+                <div class="w-20 h-20 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-rose-600 group-hover:text-white transition-colors duration-300">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-3">Atterberg Limits</h3>
+                <p class="text-slate-500 text-sm font-medium leading-relaxed px-4">Consistency limits (LL, PL, PI) and Free Swell Index (FSI) analysis.</p>
+                <div class="mt-8 text-blue-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Launch Application <span>→</span></div>
+            </a>
+
+            <!-- 06. Sieve -->
+            <a href="sieve.html" class="entrance-card group bg-white p-10 rounded-3xl shadow-xl border-2 border-transparent flex flex-col items-center text-center">
+                <div class="w-20 h-20 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-3">Sieve Analysis</h3>
+                <p class="text-slate-500 text-sm font-medium leading-relaxed px-4">Grain size distribution with automated D10, D30, D60 interpolation.</p>
+                <div class="mt-8 text-blue-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Launch Application <span>→</span></div>
+            </a>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <footer class="bg-white border-t border-slate-200 py-12 px-6">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Engineering Information Systems</p>
+            <p class="text-[11px] text-slate-500 font-medium">Provided by Mohamed Abdelazim • Lab Engineer, Egypt-Japan University</p>
+            <div class="flex gap-6 text-[10px] font-bold text-blue-600 uppercase tracking-widest">
+                <span>v3.5 Stable</span>
+                <span>Authorized Access Only</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sieve Analysis - Cumulative Retained Method</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains+Mono', monospace; }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: white !important; padding: 0 !important; }
+            .report-card { border: 1px solid #cbd5e1 !important; box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8 text-slate-900">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-slate-200 report-card">
+        
+        <!-- Header -->
+        <div class="bg-slate-900 px-8 py-6 border-b-4 border-blue-800">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-white tracking-tight uppercase">Grain Size Analysis Report</h1>
+                    <p class="text-blue-400 text-xs font-semibold tracking-[0.15em] mt-1 uppercase">
+                        Cumulative Retained Method • ASTM C136 / AASHTO T27
+                    </p>
+                </div>
+                <div class="text-right">
+                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Authorized Laboratory Engineer</p>
+                    <p class="text-white text-xs font-medium">Mohamed Abdelazim</p>
+                    <p class="text-slate-400 text-[9px]">E-JUST University, Egypt</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metadata -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-slate-50/50 border-b border-slate-200">
+            <div class="md:col-span-1">
+                <label class="block text-[10px] font-bold text-slate-500 uppercase">Project / Sample ID</label>
+                <input type="text" id="projID" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 font-semibold">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase">Soil Description</label>
+                <input type="text" id="soilDesc" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 font-semibold">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase">Test Date</label>
+                <input type="date" id="testDate" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1">
+            </div>
+        </div>
+
+        <div class="p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left: Cumulative Input Table -->
+            <div class="lg:col-span-6 space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+                    <div class="h-4 w-1 bg-blue-700"></div>
+                    <h3 class="text-xs font-bold uppercase text-slate-700">Sieve Measurements</h3>
+                </div>
+                <div class="overflow-hidden border border-slate-200 rounded-lg shadow-sm">
+                    <table class="w-full text-[11px] text-left">
+                        <thead class="bg-slate-800 text-white uppercase text-[9px]">
+                            <tr>
+                                <th class="p-2.5 border-r border-slate-700">Sieve</th>
+                                <th class="p-2.5 border-r border-slate-700">Size (mm)</th>
+                                <th class="p-2.5 border-r border-slate-700">Cum. Retained (g)</th>
+                                <th class="p-2.5 text-center bg-blue-900">Passing %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sieveBody" class="divide-y divide-slate-100 bg-white">
+                            <!-- Rows injected by JS -->
+                        </tbody>
+                        <tfoot class="bg-slate-100">
+                            <tr class="font-bold">
+                                <td colspan="2" class="p-3 text-right text-[10px] uppercase">Pan (Total Sample Wt):</td>
+                                <td class="p-1"><input type="number" id="panWeight" oninput="calculateAnalysis()" placeholder="Total Grams" class="w-full p-2 bg-blue-50 outline-none text-center font-mono font-bold text-blue-900"></td>
+                                <td class="p-2 text-center text-blue-700 font-mono">0.0%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right: Analysis & Chart -->
+            <div class="lg:col-span-6 space-y-6">
+                <!-- Percentage Results -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-100 p-4 rounded-lg border border-slate-200 space-y-2">
+                        <div class="flex justify-between text-[11px] border-b border-slate-200 pb-1">
+                            <span class="text-slate-500 font-bold uppercase text-[9px]">Gravel %</span>
+                            <span id="pctGravel" class="font-mono font-bold">0.0%</span>
+                        </div>
+                        <div class="flex justify-between text-[11px] border-b border-slate-200 pb-1">
+                            <span class="text-slate-500 font-bold uppercase text-[9px]">Sand %</span>
+                            <span id="pctSand" class="font-mono font-bold">0.0%</span>
+                        </div>
+                        <div class="flex justify-between text-[11px]">
+                            <span class="text-slate-500 font-bold uppercase text-[9px]">Fines % (#200)</span>
+                            <span id="pctFines" class="font-mono font-bold text-blue-700">0.0%</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-100 p-4 rounded-lg border border-slate-200 space-y-2">
+                        <div class="flex justify-between text-[11px] border-b border-slate-200 pb-1">
+                            <span class="text-slate-500 font-bold uppercase text-[9px]">Sieve #10 %</span>
+                            <span id="resPass10" class="font-mono font-bold">0.0%</span>
+                        </div>
+                        <div class="flex justify-between text-[11px]">
+                            <span class="text-slate-500 font-bold uppercase text-[9px]">Sieve #40 %</span>
+                            <span id="resPass40" class="font-mono font-bold">0.0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coefficients (VBA Logic Implementation) -->
+                <div class="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-4">
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-slate-50 p-2 rounded">
+                            <p class="text-[9px] font-bold text-slate-400 uppercase">D60 (mm)</p>
+                            <p id="d60" class="text-sm font-mono font-bold text-slate-800">N/A</p>
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded">
+                            <p class="text-[9px] font-bold text-slate-400 uppercase">D30 (mm)</p>
+                            <p id="d30" class="text-sm font-mono font-bold text-slate-800">N/A</p>
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded">
+                            <p class="text-[9px] font-bold text-slate-400 uppercase">D10 (mm)</p>
+                            <p id="d10" class="text-sm font-mono font-bold text-slate-800">N/A</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-around items-center pt-2">
+                        <div class="text-center">
+                            <span class="text-[10px] font-bold text-blue-900 uppercase block">Uniformity (Cu)</span>
+                            <span id="cu" class="text-xl font-black text-slate-900">N.A</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-[10px] font-bold text-blue-900 uppercase block">Curvature (Cc)</span>
+                            <span id="cc" class="text-xl font-black text-slate-900">N.A</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graduation Curve -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <canvas id="gradationChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex flex-col md:flex-row justify-between items-center p-8 border-t border-slate-100 gap-4 no-print">
+            <p class="text-[10px] text-slate-500 font-medium text-center md:text-left leading-relaxed">
+                Provided by Mohamed Abdelazim. Lab Engineer,<br>
+                Egypt-Japan university for science and technology.
+            </p>
+            <div class="flex gap-3">
+                <button onclick="window.print()" class="bg-slate-900 hover:bg-black text-white text-[11px] font-bold py-2 px-8 rounded transition uppercase tracking-widest shadow-lg">
+                    Generate Report
+                </button>
+                <button onclick="location.reload()" class="text-slate-400 hover:text-red-600 text-[11px] font-bold transition">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sieves = [
+            { label: '5"', mm: 125.0 }, { label: '4"', mm: 100.0 }, { label: '3"', mm: 75.0 }, { label: '2"', mm: 50.0 },
+            { label: '1 1/2"', mm: 37.5 }, { label: '1 1/4"', mm: 31.3 }, { label: '1"', mm: 25.0 }, { label: '3/4"', mm: 19.0 },
+            { label: '1/2"', mm: 12.5 }, { label: '3/8"', mm: 9.5 }, { label: '#4', mm: 4.75 }, { label: '#8', mm: 2.36 },
+            { label: '#10', mm: 2.0 }, { label: '#16', mm: 1.18 }, { label: '#30', mm: 0.6 }, { label: '#40', mm: 0.425 },
+            { label: '#50', mm: 0.3 }, { label: '#100', mm: 0.15 }, { label: '#200', mm: 0.075 }
+        ];
+
+        let gradationChart;
+
+        window.onload = () => {
+            const tbody = document.getElementById('sieveBody');
+            sieves.forEach((s, i) => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-slate-50 transition";
+                row.innerHTML = `
+                    <td class="p-2.5 font-bold text-slate-500 border-r border-slate-100">${s.label}</td>
+                    <td class="p-2.5 text-slate-400 font-mono border-r border-slate-100">${s.mm}</td>
+                    <td class="p-1 border-r border-slate-100">
+                        <input type="number" id="cumRet_${i}" oninput="calculateAnalysis()" placeholder="0.0" class="w-full text-center bg-transparent outline-none font-mono font-bold text-blue-900">
+                    </td>
+                    <td class="p-2.5 text-center font-mono font-bold text-blue-700 bg-blue-50/40" id="pass_${i}">100.0</td>
+                `;
+                tbody.appendChild(row);
+            });
+            initChart();
+        };
+
+        function calculateAnalysis() {
+            const totalWeight = parseFloat(document.getElementById('panWeight').value) || 0;
+            if (totalWeight <= 0) return;
+
+            let plotData = [];
+
+            // Calculate Passing %
+            sieves.forEach((s, i) => {
+                const cumRet = parseFloat(document.getElementById(`cumRet_${i}`).value) || 0;
+                // Core Logic: Passing % = (Total - Cumulative Retained) / Total
+                let passing = ((totalWeight - cumRet) / totalWeight) * 100;
+                if (passing < 0) passing = 0;
+                
+                document.getElementById(`pass_${i}`).innerText = passing.toFixed(1);
+                plotData.push({ x: s.mm, y: passing });
+            });
+
+            // Soil Fractions
+            const p3in = getPassAt(75.0, plotData);
+            const pNo4 = getPassAt(4.75, plotData);
+            const pNo10 = getPassAt(2.0, plotData);
+            const pNo40 = getPassAt(0.425, plotData);
+            const pNo200 = getPassAt(0.075, plotData);
+
+            document.getElementById('pctGravel').innerText = (p3in - pNo4).toFixed(1) + "%";
+            document.getElementById('pctSand').innerText = (pNo4 - pNo200).toFixed(1) + "%";
+            document.getElementById('pctFines').innerText = pNo200.toFixed(1) + "%";
+            document.getElementById('resPass10').innerText = pNo10.toFixed(1) + "%";
+            document.getElementById('resPass40').innerText = pNo40.toFixed(1) + "%";
+
+            // D-Values (Implementing your VBA logic: log-linear interpolation)
+            const d10Val = getDValue(10, plotData);
+            const d30Val = getDValue(30, plotData);
+            const d60Val = getDValue(60, plotData);
+
+            document.getElementById('d10').innerText = d10Val ? d10Val.toFixed(3) : "N/A";
+            document.getElementById('d30').innerText = d30Val ? d30Val.toFixed(3) : "N/A";
+            document.getElementById('d60').innerText = d60Val ? d60Val.toFixed(3) : "N/A";
+
+            if (d10Val && d60Val) {
+                const cu = d60Val / d10Val;
+                const cc = (d30Val * d30Val) / (d60Val * d10Val);
+                document.getElementById('cu').innerText = cu.toFixed(2);
+                document.getElementById('cc').innerText = cc.toFixed(2);
+            }
+
+            updateChart(plotData);
+        }
+
+        // Exact replication of VBA Functions: ten(y, x), sixty(y, x), thirty(y, x)
+        function getDValue(targetP, data) {
+            // Data is x:mm, y:passing%
+            // Finds the interval where targetP is bounded
+            for (let i = 1; i < data.length; i++) {
+                const pUpper = data[i-1].y; // Passing % at larger sieve
+                const pLower = data[i].y;   // Passing % at smaller sieve
+                const dUpper = data[i-1].x; // Size mm at larger sieve
+                const dLower = data[i].x;   // Size mm at smaller sieve
+
+                if (pUpper >= targetP && pLower <= targetP) {
+                    // VBA: Slope = (x(i-1) - x(i)) / (Log(y(i-1)) - Log(y(i)))
+                    const slope = (pUpper - pLower) / (Math.log(dUpper) - Math.log(dLower));
+                    // VBA: temp = (target - x(i)) / Slope
+                    const temp = (targetP - pLower) / slope;
+                    // VBA: res = Exp(Log(y(i)) + temp)
+                    return Math.exp(Math.log(dLower) + temp);
+                }
+            }
+            return null;
+        }
+
+        function getPassAt(size, data) {
+            const found = data.find(d => d.x === size);
+            return found ? found.y : 100;
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('gradationChart').getContext('2d');
+            gradationChart = new Chart(ctx, {
+                type: 'line',
+                data: { datasets: [{ 
+                    data: [], borderColor: '#1e3a8a', backgroundColor: 'rgba(30,58,138,0.1)', 
+                    fill: true, tension: 0.3, pointRadius: 3 
+                }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        x: { 
+                            type: 'logarithmic', reverse: true, min: 0.01, max: 100,
+                            title: { display: true, text: 'Grain Size (mm)', font: { size: 10, weight: 'bold' } },
+                            ticks: { callback: v => v.toString() }
+                        },
+                        y: { 
+                            min: 0, max: 100, 
+                            title: { display: true, text: 'Passing %', font: { size: 10, weight: 'bold' } } 
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function updateChart(data) {
+            gradationChart.data.datasets[0].data = data;
+            gradationChart.update();
+        }
+    </script>
+</body>
+</html>
