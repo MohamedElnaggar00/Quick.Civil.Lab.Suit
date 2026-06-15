@@ -1,107 +1,132 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compressive Stress Report - E-JUST Lab Standards</title>
+    <title>Compressive Strength Report - E-JUST Lab Standards</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { ejust: '#1e3a8a' }
+                }
+            }
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
         
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease; }
         .font-mono { font-family: 'JetBrains+Mono', monospace; }
         
+        /* Mobile text adjustment */
+        html { -webkit-text-size-adjust: 100%; }
+
         @media print {
             .no-print { display: none !important; }
-            body { background-color: white !important; padding: 0 !important; }
-            .report-card { border: 1px solid #d1d5db !important; box-shadow: none !important; }
-            input, select { border-bottom: 1px solid #e2e8f0 !important; appearance: none; }
+            body { background-color: white !important; color: black !important; padding: 0 !important; }
+            .report-card { border: 1px solid #d1d5db !important; box-shadow: none !important; background: white !important; }
+            input, select { border-bottom: 2px solid #000 !important; color: black !important; }
+            .dark { background-color: white !important; }
         }
 
-        .bg-ejust-dark { background-color: #0f172a; }
-        .border-ejust { border-color: #1e3a8a; }
+        /* Bold Borders for inputs as requested */
+        .bold-input {
+            border: 2px solid #cbd5e1; /* slate-300 */
+        }
+        .dark .bold-input {
+            border: 2px solid #475569; /* slate-600 */
+        }
+        .bold-input:focus {
+            border-color: #1d4ed8; /* blue-700 */
+            box-shadow: 0 0 0 1px #1d4ed8;
+        }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8 text-slate-900">
+<body class="bg-slate-50 dark:bg-slate-950 min-h-screen py-4 sm:py-8 px-2 sm:px-6 lg:px-8 text-slate-900 dark:text-slate-100 transition-colors duration-300">
 
-    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-slate-200 report-card">
+    <div class="max-w-5xl mx-auto bg-white dark:bg-slate-900 rounded-xl shadow-xl overflow-hidden border-2 border-slate-200 dark:border-slate-800 report-card">
         
         <!-- Header Section -->
-        <div class="bg-slate-900 px-8 py-6 border-b-4 border-blue-800">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-white tracking-tight">COMPRESSIVE STRENGTH REPORT</h1>
-                    <p class="text-blue-400 text-xs font-semibold tracking-[0.15em] mt-1 uppercase">
-                        Statistical Analysis & Stress Calculation
-                    </p>
-                </div>
+        <div class="bg-slate-900 dark:bg-black px-4 sm:px-8 py-6 border-b-4 border-blue-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">COMPRESSIVE STRENGTH REPORT</h1>
+                <p class="text-blue-400 text-[10px] sm:text-xs font-semibold tracking-[0.15em] mt-1 uppercase">
+                    Statistical Analysis • ASTM C39 / EN 12390
+                </p>
+            </div>
+            
+            <div class="flex items-center justify-between w-full md:w-auto gap-4">
+                <!-- Dark Mode Toggle -->
+                <button onclick="toggleDarkMode()" class="no-print p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors" title="Toggle Dark Mode">
+                    <svg id="sun-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                    <svg id="moon-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                </button>
                 <div class="text-right">
-                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Authorized Laboratory Engineer</p>
-                    <p class="text-white text-xs font-medium">Mohamed Abdelazim</p>
-                    <p class="text-slate-400 text-[9px]">E-JUST University, Egypt</p>
+                    <p class="text-slate-400 text-[9px] uppercase font-bold tracking-widest leading-none">E-JUST Lab</p>
+                    <p class="text-white text-[11px] font-medium">Technical Report</p>
                 </div>
             </div>
         </div>
 
         <!-- Metadata Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 bg-slate-50/50 border-b border-slate-200">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 sm:p-8 bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-200 dark:border-slate-800">
             <div class="md:col-span-1">
-                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Project / Sample ID</label>
-                <input type="text" id="projName" oninput="autoSaveData()" placeholder="e.g. Concrete Grade C30" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 font-semibold transition-colors">
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Sample ID / Grade</label>
+                <input type="text" id="projName" oninput="autoSaveData()" placeholder="e.g. Grade C30" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 font-semibold transition-colors">
             </div>
             <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Testing Date</label>
-                <input type="date" id="testDate" oninput="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 transition-colors">
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Testing Date</label>
+                <input type="date" id="testDate" oninput="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 transition-colors">
             </div>
             <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Specimen Geometry</label>
-                <select id="dimensions" onchange="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 font-semibold transition-colors cursor-pointer">
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Specimen Geometry</label>
+                <select id="dimensions" onchange="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 font-semibold transition-colors cursor-pointer">
                     <optgroup label="Cubes">
                         <option value="150x150" selected>Cube: 150 × 150 mm</option>
                         <option value="100x100">Cube: 100 × 100 mm</option>
                         <option value="70x70">Cube: 70 × 70 mm</option>
-                        <option value="50x50">Cube: 50 × 50 mm</option>
                     </optgroup>
                     <optgroup label="Cylinders">
                         <option value="cyl150">Cylinder: Ø150 mm</option>
                         <option value="cyl100">Cylinder: Ø100 mm</option>
                     </optgroup>
-                    <optgroup label="Others">
-                        <option value="40x40">Prism: 40 × 40 mm</option>
-                    </optgroup>
                 </select>
             </div>
         </div>
 
-        <div class="p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
             <!-- Left Side: Input Table -->
             <div class="lg:col-span-7 space-y-6">
-                <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+                <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                     <div class="h-4 w-1 bg-blue-700"></div>
-                    <h3 class="text-xs font-bold uppercase text-slate-700">Sample Load Inputs (kN)</h3>
+                    <h3 class="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Maximum Load Inputs (kN)</h3>
                 </div>
                 
-                <div class="overflow-hidden border border-slate-200 rounded-lg shadow-sm">
+                <div class="overflow-hidden border-2 border-slate-200 dark:border-slate-700 rounded-lg shadow-sm">
                     <table class="w-full text-xs text-left">
-                        <thead class="bg-slate-800 text-slate-200 uppercase text-[9px] tracking-widest">
+                        <thead class="bg-slate-800 dark:bg-black text-slate-200 uppercase text-[9px] tracking-widest">
                             <tr>
-                                <th class="p-2 text-center w-12">ID</th>
-                                <th class="p-2">Maximum Load (kN)</th>
-                                <th class="p-2 text-center w-12 no-print">ID</th>
-                                <th class="p-2">Maximum Load (kN)</th>
+                                <th class="p-2 text-center w-10">ID</th>
+                                <th class="p-2">Load (kN)</th>
+                                <th class="p-2 text-center w-10">ID</th>
+                                <th class="p-2">Load (kN)</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100" id="inputTableBody">
-                            <!-- JS generates 6 rows (2 columns each to make 12 total) -->
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="inputTableBody">
+                            <!-- JS Generates 6 rows -->
                         </tbody>
                     </table>
                 </div>
 
-                <div class="flex gap-3 no-print">
-                    <button onclick="calculateStress()" class="flex-1 bg-slate-900 hover:bg-black text-white font-bold py-3 px-4 rounded-lg transition shadow-lg text-xs tracking-widest uppercase">
+                <div class="flex flex-col sm:flex-row gap-3 no-print">
+                    <button onclick="calculateStress()" class="flex-1 bg-slate-900 dark:bg-blue-700 hover:bg-black dark:hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition shadow-lg text-xs tracking-widest uppercase">
                         Process and Calculate
                     </button>
-                    <button onclick="clearAllFields()" class="px-6 py-3 border border-slate-200 text-slate-400 hover:text-red-600 transition text-xs font-bold uppercase rounded-lg">
+                    <button onclick="clearAllFields()" class="px-6 py-3 border-2 border-slate-200 dark:border-slate-700 text-slate-400 hover:text-red-600 transition text-xs font-bold uppercase rounded-lg">
                         Reset
                     </button>
                 </div>
@@ -109,54 +134,47 @@
 
             <!-- Right Side: Calculations & Results -->
             <div class="lg:col-span-5 space-y-6">
-                <div id="resultPlaceholder" class="h-full flex flex-col items-center justify-center text-center p-12 border-2 border-dashed border-slate-100 rounded-xl">
-                    <div class="text-slate-300 mb-4">
+                <div id="resultPlaceholder" class="h-full min-h-[200px] flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+                    <div class="text-slate-300 dark:text-slate-700 mb-4">
                         <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     </div>
-                    <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Awaiting Load Data</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Awaiting Data</p>
                 </div>
 
                 <div id="resultDisplay" class="hidden space-y-6">
-                    <!-- Area & Analysis -->
-                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-2 border-slate-200 dark:border-slate-700">
                         <div class="flex justify-between items-end mb-4">
                             <div>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Cross-Section Area</span>
-                                <span id="displayArea" class="text-lg font-mono font-bold text-slate-800">0.00 mm²</span>
+                                <span class="text-[9px] font-bold text-slate-400 uppercase block">Area</span>
+                                <span id="displayArea" class="text-base font-mono font-bold text-slate-800 dark:text-slate-200">0.00 mm²</span>
                             </div>
                             <div class="text-right">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Samples Validated</span>
-                                <span id="finalSampleCount" class="text-lg font-mono font-bold text-blue-700">0 / 0</span>
+                                <span class="text-[9px] font-bold text-slate-400 uppercase block">Valid Samples</span>
+                                <span id="finalSampleCount" class="text-base font-mono font-bold text-blue-700 dark:text-blue-400">0 / 0</span>
                             </div>
                         </div>
 
-                        <!-- Statistical Audit -->
-                        <div class="space-y-3">
-                            <div class="p-3 bg-white border border-slate-200 rounded text-[11px]">
-                                <div class="flex justify-between text-slate-500 mb-1 uppercase font-bold text-[9px]"><span>Cycle 1 Audit</span><span id="auditInitialAvg">0.00 kN</span></div>
-                                <div id="cycle1Exclusions" class="text-slate-400 italic">No outliers detected.</div>
-                            </div>
-                            <div class="p-3 bg-white border border-slate-200 rounded text-[11px]">
-                                <div class="flex justify-between text-slate-500 mb-1 uppercase font-bold text-[9px]"><span>Cycle 2 Audit</span><span id="auditCycle2Avg">0.00 kN</span></div>
-                                <div id="cycle2Exclusions" class="text-slate-400 italic">No outliers detected.</div>
+                        <div class="space-y-2">
+                            <div class="p-2 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded text-[10px]">
+                                <div class="flex justify-between text-slate-500 mb-1 uppercase font-bold text-[8px]"><span>Initial Avg</span><span id="auditInitialAvg">0.00 kN</span></div>
+                                <div id="cycle1Exclusions" class="text-slate-400 italic">...</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Final Result Cards -->
                     <div class="space-y-3">
-                        <div class="bg-blue-900 p-5 rounded-xl shadow-inner text-white">
-                            <span class="text-[10px] font-bold text-blue-300 uppercase tracking-widest block mb-1">Compressive Strength (MPa)</span>
+                        <div class="bg-blue-900 dark:bg-blue-800 p-5 rounded-xl shadow-inner text-white">
+                            <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest block mb-1">Compressive Strength</span>
                             <div class="flex items-baseline gap-2">
                                 <span id="stressNmm" class="text-4xl font-black tracking-tighter">0.00</span>
-                                <span class="text-sm font-bold text-blue-300">N/mm²</span>
+                                <span class="text-sm font-bold text-blue-300">MPa (N/mm²)</span>
                             </div>
                         </div>
-                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
-                            <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Metric Strength</span>
+                        <div class="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl border-2 border-emerald-100 dark:border-emerald-800/50">
+                            <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block mb-1">Metric Strength</span>
                             <div class="flex items-baseline gap-2">
-                                <span id="stressKgcm" class="text-2xl font-black text-emerald-700 tracking-tighter">0.00</span>
-                                <span class="text-xs font-bold text-emerald-600">Kg/cm²</span>
+                                <span id="stressKgcm" class="text-2xl font-black text-emerald-700 dark:text-emerald-400 tracking-tighter">0.00</span>
+                                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Kg/cm²</span>
                             </div>
                         </div>
                     </div>
@@ -165,39 +183,49 @@
         </div>
 
         <!-- Footer -->
-        <div class="flex flex-col md:flex-row justify-between items-center p-8 border-t border-slate-100 gap-4 no-print">
-            <p class="text-[10px] text-slate-500 font-medium text-center md:text-left leading-relaxed">
-                Provided by Mohamed Abdelazim. Lab Engineer,<br>
-                Egypt-Japan university for science and technology.
+        <div class="flex flex-col md:flex-row justify-between items-center p-6 sm:p-8 border-t-2 border-slate-100 dark:border-slate-800 gap-6 no-print">
+            <p class="text-[10px] text-slate-400 font-medium text-center md:text-left leading-relaxed">
+                © 2026 Mohamed Abdelazim • QC/QA Engineer - Egypt-Japan university
             </p>
-            <div class="flex gap-3">
-                <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold py-2 px-5 rounded transition flex items-center gap-2 uppercase tracking-wider">
+            <div class="flex w-full sm:w-auto gap-3">
+                <button onclick="exportToCSV()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
                     Export CSV
                 </button>
-                <button onclick="window.print()" class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold py-2 px-6 rounded transition shadow-md uppercase tracking-wider">
-                    Print Report
+                <button onclick="window.print()" class="flex-1 sm:flex-none bg-slate-800 dark:bg-slate-700 hover:bg-black text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
+                    Print PDF
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Print Footer -->
-    <div class="hidden print:block mt-8 text-[9px] text-slate-400 text-center italic">
-        Report Generated by Mohamed Abdelazim • E-JUST University Laboratory
-    </div>
-
     <script>
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcons();
+        }
+
+        function updateThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            document.getElementById('sun-icon').classList.toggle('hidden', !isDark);
+            document.getElementById('moon-icon').classList.toggle('hidden', isDark);
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            updateThemeIcons();
+
             const tbody = document.getElementById('inputTableBody');
             for(let i=1; i<=6; i++) {
-                const s1 = i;
-                const s2 = i + 6;
+                const s1 = i, s2 = i + 6;
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="p-2 text-center bg-slate-50 font-bold text-slate-400 border-r border-slate-100">${s1}</td>
-                    <td class="p-1 border-r border-slate-100"><input type="number" id="load${s1}" step="0.01" class="w-full bg-transparent p-1.5 outline-none font-mono text-sm focus:bg-blue-50 transition"></td>
-                    <td class="p-2 text-center bg-slate-50 font-bold text-slate-400 border-r border-slate-100 no-print">${s2}</td>
-                    <td class="p-1"><input type="number" id="load${s2}" step="0.01" class="w-full bg-transparent p-1.5 outline-none font-mono text-sm focus:bg-blue-50 transition"></td>
+                    <td class="p-2 text-center bg-slate-50 dark:bg-slate-800/50 font-bold text-slate-400 border-r border-slate-100 dark:border-slate-800">${s1}</td>
+                    <td class="p-1 border-r border-slate-100 dark:border-slate-800"><input type="number" id="load${s1}" step="0.01" class="bold-input w-full bg-transparent p-1.5 rounded outline-none font-mono text-sm focus:bg-blue-50 dark:focus:bg-blue-900/20 transition"></td>
+                    <td class="p-2 text-center bg-slate-50 dark:bg-slate-800/50 font-bold text-slate-400 border-r border-slate-100 dark:border-slate-800">${s2}</td>
+                    <td class="p-1"><input type="number" id="load${s2}" step="0.01" class="bold-input w-full bg-transparent p-1.5 rounded outline-none font-mono text-sm focus:bg-blue-50 dark:focus:bg-blue-900/20 transition"></td>
                 `;
                 tbody.appendChild(row);
             }
@@ -211,62 +239,48 @@
                 const val = parseFloat(document.getElementById(`load${i}`).value);
                 if (!isNaN(val) && val > 0) rawLoads.push(val);
             }
-
             if (rawLoads.length === 0) return alert("Enter load values.");
 
-            // Statistical 2-Cycle Cleanse
             const getAvg = arr => arr.reduce((a,b) => a+b, 0) / arr.length;
-            
-            // Cycle 1
             const avg1 = getAvg(rawLoads);
-            let passed1 = [], excl1 = [];
-            rawLoads.forEach(l => {
-                const dev = ((l - avg1) / avg1) * 100;
-                if (Math.abs(dev) <= 20) passed1.push(l);
-                else excl1.push(`${l} (${dev > 0 ? '+' : ''}${dev.toFixed(1)}%)`);
-            });
+            let passed = [];
+            rawLoads.forEach(l => { if (Math.abs(((l - avg1) / avg1) * 100) <= 20) passed.push(l); });
+            const finalAvgLoad = passed.length > 0 ? getAvg(passed) : 0;
 
-            // Cycle 2
-            let passed2 = [], excl2 = [], avg2 = 0;
-            if (passed1.length > 0) {
-                avg2 = getAvg(passed1);
-                passed1.forEach(l => {
-                    const dev = ((l - avg2) / avg2) * 100;
-                    if (Math.abs(dev) <= 20) passed2.push(l);
-                    else excl2.push(`${l} (${dev > 0 ? '+' : ''}${dev.toFixed(1)}%)`);
-                });
-            }
-
-            const finalAvgLoad = passed2.length > 0 ? getAvg(passed2) : 0;
-
-            // Geometry
             let areaMm2 = 0;
-            switch (dimensionType) {
-                case "150x150": areaMm2 = 22500; break;
-                case "100x100": areaMm2 = 10000; break;
-                case "70x70": areaMm2 = 4900; break;
-                case "50x50": areaMm2 = 2500; break;
-                case "40x40": areaMm2 = 1600; break;
-                case "cyl150": areaMm2 = Math.PI * 75 * 75; break;
-                case "cyl100": areaMm2 = Math.PI * 50 * 50; break;
-            }
+            if (dimensionType === "150x150") areaMm2 = 22500;
+            else if (dimensionType === "100x100") areaMm2 = 10000;
+            else if (dimensionType === "70x70") areaMm2 = 4900;
+            else if (dimensionType === "cyl150") areaMm2 = Math.PI * 75 * 75;
+            else if (dimensionType === "cyl100") areaMm2 = Math.PI * 50 * 50;
 
             const stress = (finalAvgLoad * 1000) / areaMm2;
-
-            // UI Update
             document.getElementById('displayArea').innerText = areaMm2.toFixed(2) + " mm²";
-            document.getElementById('finalSampleCount').innerText = `${passed2.length} / ${rawLoads.length}`;
+            document.getElementById('finalSampleCount').innerText = `${passed.length} / ${rawLoads.length}`;
             document.getElementById('auditInitialAvg').innerText = avg1.toFixed(2) + " kN";
-            document.getElementById('cycle1Exclusions').innerHTML = excl1.length ? `<span class="text-red-500 font-bold">Dropped:</span> ${excl1.join(', ')}` : "No outliers detected.";
-            document.getElementById('auditCycle2Avg').innerText = avg2 ? avg2.toFixed(2) + " kN" : "N/A";
-            document.getElementById('cycle2Exclusions').innerHTML = excl2.length ? `<span class="text-red-500 font-bold">Dropped:</span> ${excl2.join(', ')}` : "No outliers detected.";
-            
             document.getElementById('stressNmm').innerText = stress.toFixed(2);
             document.getElementById('stressKgcm').innerText = (stress * 10.197).toFixed(2);
-
             document.getElementById('resultPlaceholder').classList.add('hidden');
             document.getElementById('resultDisplay').classList.remove('hidden');
             autoSaveData();
+        }
+
+        function exportToCSV() {
+            let csv = ["COMPRESSIVE STRENGTH REPORT"];
+            csv.push(`Project,${document.getElementById('projName').value || 'N/A'}`);
+            csv.push(`Date,${document.getElementById('testDate').value || 'N/A'}`);
+            csv.push(`Area,${document.getElementById('displayArea').innerText}`);
+            csv.push(`Strength (MPa),${document.getElementById('stressNmm').innerText}`);
+            csv.push("");
+            csv.push("Sample ID,Load (kN)");
+            for(let i=1; i<=12; i++) {
+                csv.push(`${i},${document.getElementById('load'+i).value || 0}`);
+            }
+            const blob = new Blob([csv.join("\n")], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Strength_Report_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
         }
 
         function autoSaveData() {
@@ -286,20 +300,7 @@
             document.getElementById('projName').value = data.proj || "";
             document.getElementById('testDate').value = data.date || "";
             document.getElementById('dimensions').value = data.dim || "150x150";
-            data.loads.forEach((v, i) => document.getElementById(`load${i+1}`).value = v);
-        }
-
-        function exportToCSV() {
-            let csv = "Sample ID,Load (kN),Status\n";
-            for(let i=1; i<=12; i++) {
-                csv += `${i},${document.getElementById('load'+i).value || 0}\n`;
-            }
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Stress_Report_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
+            if(data.loads) data.loads.forEach((v, i) => document.getElementById(`load${i+1}`).value = v);
         }
 
         function clearAllFields() {
