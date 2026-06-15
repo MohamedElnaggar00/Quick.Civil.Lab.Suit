@@ -3,315 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atterberg Limits Report - E-JUST Lab</title>
+    <title>Proctor Compaction Report - E-JUST Lab</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { ejust: '#1e3a8a' }
+                }
+            }
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease; }
         .font-mono { font-family: 'JetBrains+Mono', monospace; }
+
+        html { -webkit-text-size-adjust: 100%; }
+
         @media print {
             .no-print { display: none !important; }
-            body { background-color: white !important; padding: 0 !important; }
-            .report-card { border: 1px solid #d1d5db !important; shadow: none !important; }
+            body { background-color: white !important; color: black !important; padding: 0 !important; }
+            .report-card { border: 1px solid #d1d5db !important; box-shadow: none !important; background: white !important; }
+            input { border-bottom: 2px solid #000 !important; color: black !important; }
+            .dark { background-color: white !important; }
         }
+
+        /* Bold Borders for Inputs */
+        .bold-input {
+            border: 2px solid #cbd5e1;
+        }
+        .dark .bold-input {
+            border: 2px solid #475569;
+        }
+        .bold-input:focus {
+            border-color: #1d4ed8;
+            box-shadow: 0 0 0 1px #1d4ed8;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8 text-slate-900">
+<body class="bg-slate-50 dark:bg-slate-950 min-h-screen py-4 sm:py-8 px-2 sm:px-6 lg:px-8 text-slate-900 dark:text-slate-100 transition-colors duration-300">
 
-    <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-slate-200 report-card">
+    <div class="max-w-6xl mx-auto bg-white dark:bg-slate-900 rounded-xl shadow-xl overflow-hidden border-2 border-slate-200 dark:border-slate-800 report-card">
         
         <!-- Header -->
-        <div class="bg-slate-900 px-8 py-6 border-b-4 border-blue-800">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-white tracking-tight uppercase">Atterberg Limits & Free Swell Report</h1>
-                    <p class="text-blue-400 text-xs font-semibold tracking-[0.15em] mt-1 uppercase">
-                        AASHTO T89, T90 • ASTM D4318 • Soil Consistency
-                    </p>
-                </div>
-                <div class="text-right">
-                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Authorized Laboratory Engineer</p>
-                    <p class="text-white text-xs font-medium">Mohamed Abdelazim</p>
-                    <p class="text-slate-400 text-[9px]">E-JUST University, Egypt</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Project Info -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-slate-50/50 border-b border-slate-200">
+        <div class="bg-slate-900 dark:bg-black px-4 sm:px-8 py-6 border-b-4 border-blue-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase">Project / Sample ID</label>
-                <input type="text" id="projID" class="w-full bg-transparent border-b border-slate-300 focus:border-blue-700 outline-none text-sm py-1 font-semibold">
+                <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight uppercase leading-tight">Moisture-Density Relationship</h1>
+                <p class="text-blue-400 text-[10px] sm:text-xs font-semibold tracking-[0.15em] mt-1 uppercase">
+                    AASHTO T99 / T180 • Proctor Test
+                </p>
             </div>
-            <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase">Boring / Depth</label>
-                <input type="text" id="depth" class="w-full bg-transparent border-b border-slate-300 focus:border-blue-700 outline-none text-sm py-1 font-semibold">
-            </div>
-            <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase">Test Date</label>
-                <input type="date" id="testDate" class="w-full bg-transparent border-b border-slate-300 focus:border-blue-700 outline-none text-sm py-1">
-            </div>
-        </div>
-
-        <form id="atterbergForm" class="p-8 space-y-10" oninput="calculateAll()">
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                
-                <!-- Liquid Limit Table -->
-                <div class="space-y-4">
-                    <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+            <div class="flex items-center justify-between w-full md:w-auto gap-4">
+                <button onclick="toggleDarkMode()" class="no-print p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors">
+                    <svg id="sun-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                    <svg id="moon-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                </button>
+                <div class="text-right">
+                    <p class="text-slate-400 text-[9px] uppercase font-bold tracking-widest leading-none">E-JUST Lab</p>
+                    <p class="text-white text-[11px] font-medium">Technical Report</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metadata -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 sm:p-8 bg-slate-50/50 dark:bg-slate-800/30 border-b-2 border-slate-200 dark:border-slate-800">
+            <div class="md:col-span-1">
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Project Name</label>
+                <input type="text" id="projName" oninput="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 font-semibold">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Sample Description</label>
+                <input type="text" id="sampleDesc" oninput="autoSaveData()" placeholder="e.g. Base Course" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 font-semibold">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Testing Date</label>
+                <input type="date" id="testDate" oninput="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1">
+            </div>
+        </div>
+
+        <form id="proctorForm" class="p-4 sm:p-8 space-y-8" oninput="calculateProctor(); autoSaveData();">
+            <!-- Config Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div class="space-y-4 lg:col-span-2">
+                    <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                         <div class="h-4 w-1 bg-blue-700"></div>
-                        <h3 class="text-xs font-bold uppercase text-slate-700">Liquid Limit (LL) Values</h3>
+                        <h3 class="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Apparatus</h3>
                     </div>
-                    <div class="overflow-x-auto rounded-lg border border-slate-200">
-                        <table class="w-full text-[11px] text-left">
-                            <thead class="bg-slate-800 text-white uppercase text-[9px]">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white dark:bg-slate-800 p-3 rounded border-2 border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                            <label class="block text-[8px] font-bold text-slate-400 uppercase mb-1">Mold Volume (cm³)</label>
+                            <input type="number" id="moldVol" step="0.01" class="w-full text-center bg-transparent text-sm font-mono font-bold text-blue-900 dark:text-blue-400 outline-none">
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-3 rounded border-2 border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                            <label class="block text-[8px] font-bold text-slate-400 uppercase mb-1">Mold Weight (g)</label>
+                            <input type="number" id="moldWt" step="0.01" class="w-full text-center bg-transparent text-sm font-mono font-bold text-blue-900 dark:text-blue-400 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4 lg:col-span-2">
+                    <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                        <div class="h-4 w-1 bg-indigo-700"></div>
+                        <h3 class="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Oversize Correction</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white dark:bg-slate-800 p-3 rounded border-2 border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                            <label class="block text-[8px] font-bold text-slate-400 uppercase mb-1">GS of Oversize</label>
+                            <input type="number" id="gsOversize" step="0.001" placeholder="2.65" class="w-full text-center bg-transparent text-sm font-mono font-bold text-indigo-900 dark:text-indigo-400 outline-none">
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-3 rounded border-2 border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                            <label class="block text-[8px] font-bold text-slate-400 uppercase mb-1">Oversize %</label>
+                            <input type="number" id="pOversize" step="0.1" placeholder="0.0" class="w-full text-center bg-transparent text-sm font-mono font-bold text-indigo-900 dark:text-indigo-400 outline-none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Table -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                        <div class="h-4 w-1 bg-slate-800 dark:bg-slate-200"></div>
+                        <h3 class="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Measurements</h3>
+                    </div>
+                    <div class="overflow-x-auto border-2 border-slate-200 dark:border-slate-700 rounded-lg custom-scrollbar">
+                        <table class="w-full text-left border-collapse text-[11px]">
+                            <thead class="bg-slate-800 dark:bg-black text-white uppercase text-[9px] tracking-widest">
                                 <tr>
-                                    <th class="p-2 border-r border-slate-700">N (Blows)</th>
-                                    <th class="p-2 border-r border-slate-700">W1 (Tare)</th>
-                                    <th class="p-2 border-r border-slate-700">W2 (Wet)</th>
-                                    <th class="p-2 border-r border-slate-700">W3 (Dry)</th>
-                                    <th class="p-2 text-center bg-blue-900">Wc %</th>
+                                    <th class="p-2 border-r border-slate-700 text-center">W.C%</th>
+                                    <th class="p-2 border-r border-slate-700">Mold+Soil (g)</th>
+                                    <th class="p-2 text-center">Dry Density</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                <script>
-                                    for(let i=0; i<3; i++) {
-                                        document.write(`
-                                            <tr>
-                                                <td class="p-1 border-r border-slate-100"><input type="number" id="ll_n_${i}" class="w-full text-center outline-none font-bold text-blue-900"></td>
-                                                <td class="p-1 border-r border-slate-100"><input type="number" id="ll_w1_${i}" step="0.001" class="w-full text-center outline-none"></td>
-                                                <td class="p-1 border-r border-slate-100"><input type="number" id="ll_w2_${i}" step="0.001" class="w-full text-center outline-none"></td>
-                                                <td class="p-1 border-r border-slate-100"><input type="number" id="ll_w3_${i}" step="0.001" class="w-full text-center outline-none"></td>
-                                                <td class="p-2 text-center font-mono font-bold text-blue-700" id="ll_wc_${i}">0.00</td>
-                                            </tr>
-                                        `);
-                                    }
-                                </script>
+                            <tbody id="dataTable" class="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900/50">
+                                <!-- Rows injected by JS -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Plastic Limit & FSI -->
-                <div class="space-y-8">
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
-                            <div class="h-4 w-1 bg-emerald-700"></div>
-                            <h3 class="text-xs font-bold uppercase text-slate-700">Plastic Limit (PL) Values</h3>
-                        </div>
-                        <div class="overflow-x-auto rounded-lg border border-slate-200">
-                            <table class="w-full text-[11px] text-left">
-                                <thead class="bg-slate-800 text-white uppercase text-[9px]">
-                                    <tr>
-                                        <th class="p-2 border-r border-slate-700 text-center">Trial</th>
-                                        <th class="p-2 border-r border-slate-700">W1 (Tare)</th>
-                                        <th class="p-2 border-r border-slate-700">W2 (Wet)</th>
-                                        <th class="p-2 border-r border-slate-700">W3 (Dry)</th>
-                                        <th class="p-2 text-center bg-emerald-900">Wc %</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100">
-                                    <script>
-                                        for(let i=0; i<2; i++) {
-                                            document.write(`
-                                                <tr>
-                                                    <td class="p-2 text-center bg-slate-50 font-bold border-r border-slate-100">${i+1}</td>
-                                                    <td class="p-1 border-r border-slate-100"><input type="number" id="pl_w1_${i}" step="0.001" class="w-full text-center outline-none"></td>
-                                                    <td class="p-1 border-r border-slate-100"><input type="number" id="pl_w2_${i}" step="0.001" class="w-full text-center outline-none"></td>
-                                                    <td class="p-1 border-r border-slate-100"><input type="number" id="pl_w3_${i}" step="0.001" class="w-full text-center outline-none"></td>
-                                                    <td class="p-2 text-center font-mono font-bold text-emerald-700" id="pl_wc_${i}">0.00</td>
-                                                </tr>
-                                            `);
-                                        }
-                                    </script>
-                                </tbody>
-                            </table>
-                        </div>
+                <!-- Visualization -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                        <div class="h-4 w-1 bg-blue-700"></div>
+                        <h3 class="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Compaction Curve</h3>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-2 sm:p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 shadow-inner">
+                        <canvas id="compactionChart" height="220"></canvas>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
-                            <div class="h-4 w-1 bg-amber-600"></div>
-                            <h3 class="text-xs font-bold uppercase text-slate-700">Free Swelling Index (FSI)</h3>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-white p-3 rounded border border-slate-200">
-                                <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Dry Cylinder (mL)</label>
-                                <input type="number" id="fsi_dry" step="0.1" class="w-full text-sm font-mono font-bold outline-none">
+                    <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                        <div class="bg-blue-900 dark:bg-blue-800 p-4 rounded-lg text-white shadow-lg">
+                            <span class="text-[8px] font-bold text-blue-300 uppercase block mb-1">Max Dry Density</span>
+                            <div class="flex items-baseline gap-1">
+                                <span id="resMDD" class="text-xl sm:text-2xl font-black">0.000</span>
+                                <span class="text-[9px] font-medium text-blue-300 uppercase">g/cm³</span>
                             </div>
-                            <div class="bg-white p-3 rounded border border-slate-200">
-                                <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">In Water 24h (mL)</label>
-                                <input type="number" id="fsi_wet" step="0.1" class="w-full text-sm font-mono font-bold outline-none">
+                        </div>
+                        <div class="bg-slate-800 dark:bg-slate-950 p-4 rounded-lg text-white shadow-lg border border-slate-700">
+                            <span class="text-[8px] font-bold text-slate-400 uppercase block mb-1">Opt. Moisture</span>
+                            <div class="flex items-baseline gap-1">
+                                <span id="resOMC" class="text-xl sm:text-2xl font-black">0.0</span>
+                                <span class="text-[9px] font-medium text-slate-400">%</span>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Visual Charts Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div class="space-y-4">
-                    <h3 class="text-xs font-bold uppercase text-slate-500 text-center">Flow Curve (Liquid Limit)</h3>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200"><canvas id="flowChart" height="220"></canvas></div>
-                </div>
-                <div class="space-y-4">
-                    <h3 class="text-xs font-bold uppercase text-slate-500 text-center">Casagrande Plasticity Chart</h3>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200"><canvas id="plasticityChart" height="220"></canvas></div>
-                </div>
-            </div>
-
-            <!-- Summary Table of Results -->
-            <div class="bg-slate-900 rounded-xl p-8 text-white shadow-2xl">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    <div class="text-center md:border-r border-slate-700">
-                        <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest block mb-2">Liquid Limit (LL)</span>
-                        <div class="text-3xl font-black"><span id="resLL">0.00</span><span class="text-sm font-medium ml-1">%</span></div>
-                    </div>
-                    <div class="text-center md:border-r border-slate-700">
-                        <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-2">Plastic Limit (PL)</span>
-                        <div class="text-3xl font-black"><span id="resPL">0.00</span><span class="text-sm font-medium ml-1">%</span></div>
-                    </div>
-                    <div class="text-center md:border-r border-slate-700">
-                        <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest block mb-2">Plasticity Index (PI)</span>
-                        <div class="text-3xl font-black"><span id="resPI">0.00</span><span class="text-sm font-medium ml-1">%</span></div>
-                    </div>
-                    <div class="text-center">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Free Swelling (FSI)</span>
-                        <div class="text-3xl font-black"><span id="resFSI">0</span><span class="text-sm font-medium ml-1">%</span></div>
+                    <div id="correctedDiv" class="hidden bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-200 dark:border-emerald-800 p-3 rounded-lg flex justify-between items-center">
+                        <span class="text-[9px] font-bold text-emerald-700 dark:text-emerald-400 uppercase">Corrected MDD</span>
+                        <span id="resCorrected" class="text-sm font-mono font-black text-emerald-800 dark:text-emerald-400">0.000 g/cm³</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Footer Actions -->
-            <div class="flex justify-between items-center no-print">
-                <p class="text-[10px] text-slate-400">© 2024 Mohamed Abdelazim • E-JUST University Laboratory</p>
-                <div class="flex gap-4">
-                    <button type="button" onclick="window.print()" class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold py-2 px-8 rounded-full transition uppercase tracking-widest">Generate PDF</button>
-                    <button type="button" onclick="location.reload()" class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Reset</button>
+            <!-- Footer -->
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t-2 border-slate-200 dark:border-slate-800 gap-6 no-print">
+                <p class="text-[10px] text-slate-400 font-medium text-center md:text-left leading-relaxed">
+                    © 2026 Mohamed Abdelazim • QC/QA Engineer - Egypt-Japan university
+                </p>
+                <div class="flex w-full sm:w-auto gap-3">
+                    <button type="button" onclick="exportToCSV()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
+                        Export CSV
+                    </button>
+                    <button type="button" onclick="window.print()" class="flex-1 sm:flex-none bg-slate-800 dark:bg-slate-700 hover:bg-black text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
+                        Print PDF
+                    </button>
                 </div>
             </div>
         </form>
     </div>
 
     <script>
-        let flowChart, plasticityChart;
+        let myChart;
+        const waterContentSteps = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcons();
+            updateChartTheme();
+        }
+
+        function updateThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            document.getElementById('sun-icon').classList.toggle('hidden', !isDark);
+            document.getElementById('moon-icon').classList.toggle('hidden', isDark);
+        }
+
+        function updateChartTheme() {
+            if (!myChart) return;
+            const isDark = document.documentElement.classList.contains('dark');
+            const color = isDark ? '#94a3b8' : '#475569';
+            myChart.options.scales.x.ticks.color = color;
+            myChart.options.scales.y.ticks.color = color;
+            myChart.options.scales.x.grid.color = isDark ? '#1e293b' : '#e2e8f0';
+            myChart.options.scales.y.grid.color = isDark ? '#1e293b' : '#e2e8f0';
+            myChart.update();
+        }
 
         window.onload = () => {
-            initFlowChart();
-            initPlasticityChart();
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            updateThemeIcons();
+
+            const tableBody = document.getElementById('dataTable');
+            waterContentSteps.forEach((wc, index) => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-slate-100 dark:border-slate-800";
+                row.innerHTML = `
+                    <td class="p-2 text-center bg-slate-50 dark:bg-slate-800/50 font-bold text-slate-500 border-r border-slate-100 dark:border-slate-800">${wc}%</td>
+                    <td class="p-1 border-r border-slate-100 dark:border-slate-800">
+                        <input type="number" id="totalWt_${index}" step="0.1" class="bold-input w-full text-center bg-transparent rounded outline-none font-mono font-bold text-blue-900 dark:text-blue-400 py-1">
+                    </td>
+                    <td class="p-2 text-center font-mono font-bold text-slate-400" id="dryDens_${index}">-</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            initChart();
+            loadSavedData();
+            updateChartTheme();
         };
 
-        function calculateAll() {
-            // 1. Calculate LL Trials
-            let llData = [];
-            for(let i=0; i<3; i++) {
-                const n = parseFloat(document.getElementById(`ll_n_${i}`).value);
-                const w1 = parseFloat(document.getElementById(`ll_w1_${i}`).value);
-                const w2 = parseFloat(document.getElementById(`ll_w2_${i}`).value);
-                const w3 = parseFloat(document.getElementById(`ll_w3_${i}`).value);
-                
-                if (w2 > w3 && w3 > w1) {
-                    const wc = ((w2 - w3) / (w3 - w1)) * 100;
-                    document.getElementById(`ll_wc_${i}`).innerText = wc.toFixed(2);
-                    if (n > 0) llData.push({ n: n, wc: wc });
-                }
-            }
-
-            // Linear Regression for LL (wc = m * log(n) + c)
-            let finalLL = 0;
-            if (llData.length >= 2) {
-                const x = llData.map(d => Math.log10(d.n));
-                const y = llData.map(d => d.wc);
-                const n_points = x.length;
-                
-                const sumX = x.reduce((a, b) => a + b, 0);
-                const sumY = y.reduce((a, b) => a + b, 0);
-                const sumXY = x.reduce((sum, v, i) => sum + v * y[i], 0);
-                const sumX2 = x.reduce((sum, v) => sum + v * v, 0);
-                
-                const slope = (n_points * sumXY - sumX * sumY) / (n_points * sumX2 - sumX * sumX);
-                const intercept = (sumY - slope * sumX) / n_points;
-                
-                finalLL = slope * Math.log10(25) + intercept;
-                document.getElementById('resLL').innerText = finalLL.toFixed(2);
-                updateFlowChart(llData, slope, intercept);
-            }
-
-            // 2. Calculate PL
-            let plWcs = [];
-            for(let i=0; i<2; i++) {
-                const w1 = parseFloat(document.getElementById(`pl_w1_${i}`).value);
-                const w2 = parseFloat(document.getElementById(`pl_w2_${i}`).value);
-                const w3 = parseFloat(document.getElementById(`pl_w3_${i}`).value);
-                if (w2 > w3 && w3 > w1) {
-                    const wc = ((w2 - w3) / (w3 - w1)) * 100;
-                    document.getElementById(`pl_wc_${i}`).innerText = wc.toFixed(2);
-                    plWcs.push(wc);
-                }
-            }
-            const finalPL = plWcs.length > 0 ? plWcs.reduce((a,b)=>a+b,0)/plWcs.length : 0;
-            document.getElementById('resPL').innerText = finalPL.toFixed(2);
-
-            // 3. PI
-            const finalPI = finalLL > 0 && finalPL > 0 ? finalLL - finalPL : 0;
-            document.getElementById('resPI').innerText = finalPI.toFixed(2);
-
-            // 4. FSI
-            const fDry = parseFloat(document.getElementById('fsi_dry').value);
-            const fWet = parseFloat(document.getElementById('fsi_wet').value);
-            if (fDry > 0 && fWet >= fDry) {
-                const fsi = ((fWet - fDry) / fDry) * 100;
-                document.getElementById('resFSI').innerText = Math.round(fsi);
-            }
-
-            updatePlasticityChart(finalLL, finalPI);
-        }
-
-        function initFlowChart() {
-            const ctx = document.getElementById('flowChart').getContext('2d');
-            flowChart = new Chart(ctx, {
-                type: 'scatter',
-                data: { datasets: [{ label: 'Trials', data: [], backgroundColor: '#1e3a8a' }, { label: 'Regression', data: [], type: 'line', borderColor: '#94a3b8', borderDash:[5,5], fill: false, pointRadius: 0 }] },
-                options: { scales: { x: { type: 'logarithmic', title: { display: true, text: 'Number of Blows (N)' }, min: 10, max: 50 }, y: { title: { display: true, text: 'Moisture Content (%)' } } } }
-            });
-        }
-
-        function updateFlowChart(pts, m, c) {
-            flowChart.data.datasets[0].data = pts.map(p => ({ x: p.n, y: p.wc }));
-            flowChart.data.datasets[1].data = [10, 50].map(n => ({ x: n, y: m * Math.log10(n) + c }));
-            flowChart.update();
-        }
-
-        function initPlasticityChart() {
-            const ctx = document.getElementById('plasticityChart').getContext('2d');
-            // A-line: PI = 0.73 * (LL - 20)
-            const aLine = [];
-            for(let ll=20; ll<=100; ll+=10) aLine.push({ x: ll, y: 0.73 * (ll - 20) });
-
-            plasticityChart = new Chart(ctx, {
-                type: 'scatter',
+        function initChart() {
+            const ctx = document.getElementById('compactionChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'line',
                 data: {
-                    datasets: [
-                        { label: 'A-Line', data: aLine, type: 'line', borderColor: '#000', borderWidth: 1, fill: false, pointRadius: 0 },
-                        { label: 'Sample', data: [], backgroundColor: '#ef4444', pointRadius: 7, pointStyle: 'rectRot' }
-                    ]
+                    labels: waterContentSteps,
+                    datasets: [{
+                        label: 'Dry Density (g/cm³)',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        fill: true
+                    }]
                 },
                 options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
                     scales: {
-                        x: { title: { display: true, text: 'Liquid Limit (LL)' }, min: 0, max: 100 },
-                        y: { title: { display: true, text: 'Plasticity Index (PI)' }, min: 0, max: 60 }
+                        x: { display: true, title: { display: true, text: 'Moisture (%)', font: { size: 10 } } },
+                        y: { display: true, title: { display: true, text: 'Dry Density (g/cm³)', font: { size: 10 } } }
                     }
                 }
             });
         }
 
-        function updatePlasticityChart(ll, pi) {
-            if (ll > 0) {
-                plasticityChart.data.datasets[1].data = [{ x: ll, y: pi }];
-                plasticityChart.update();
+        function calculateProctor() {
+            const vol = parseFloat(document.getElementById('moldVol').value) || 0;
+            const mwt = parseFloat(document.getElementById('moldWt').value) || 0;
+            const gs_ov = parseFloat(document.getElementById('gsOversize').value) || 2.65;
+            const p_ov = parseFloat(document.getElementById('pOversize').value) || 0;
+
+            let dryDensities = [];
+            let chartData = [];
+
+            waterContentSteps.forEach((wc, index) => {
+                const totalWt = parseFloat(document.getElementById(`totalWt_${index}`).value) || 0;
+                const dryDisplay = document.getElementById(`dryDens_${index}`);
+
+                if (vol > 0 && totalWt > mwt) {
+                    const dryDens = ((totalWt - mwt) / vol) / (1 + (wc / 100));
+                    dryDisplay.innerText = dryDens.toFixed(3);
+                    dryDisplay.className = "p-2 text-center font-mono font-bold text-blue-800 dark:text-blue-400";
+                    dryDensities.push({ x: wc, y: dryDens });
+                    chartData.push(dryDens);
+                } else {
+                    dryDisplay.innerText = "-";
+                    chartData.push(null);
+                }
+            });
+
+            if (dryDensities.length > 1) {
+                const peak = [...dryDensities].sort((a, b) => b.y - a.y)[0];
+                document.getElementById('resMDD').innerText = peak.y.toFixed(3);
+                document.getElementById('resOMC').innerText = peak.x.toFixed(1);
+
+                if (p_ov > 0) {
+                    document.getElementById('correctedDiv').classList.remove('hidden');
+                    const cMDD = (100 * peak.y * gs_ov) / (peak.y * p_ov + gs_ov * (100 - p_ov));
+                    document.getElementById('resCorrected').innerText = cMDD.toFixed(3) + " g/cm³";
+                } else {
+                    document.getElementById('correctedDiv').classList.add('hidden');
+                }
             }
+
+            myChart.data.datasets[0].data = chartData;
+            myChart.update();
+        }
+
+        function exportToCSV() {
+            let csv = ["PROCTOR COMPACTION REPORT"];
+            csv.push(`Project,${document.getElementById('projName').value || 'N/A'}`);
+            csv.push(`Sample,${document.getElementById('sampleDesc').value || 'N/A'}`);
+            csv.push(`MDD,${document.getElementById('resMDD').innerText}`);
+            csv.push(`OMC,${document.getElementById('resOMC').innerText}`);
+            csv.push("");
+            csv.push("Moisture Content (%),Total Weight (g),Dry Density (g/cm³)");
+            waterContentSteps.forEach((wc, i) => {
+                csv.push(`${wc},${document.getElementById('totalWt_'+i).value || 0},${document.getElementById('dryDens_'+i).innerText}`);
+            });
+
+            const blob = new Blob([csv.join("\n")], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Proctor_Report_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        function autoSaveData() {
+            const data = {
+                proj: document.getElementById('projName').value,
+                desc: document.getElementById('sampleDesc').value,
+                date: document.getElementById('testDate').value,
+                vol: document.getElementById('moldVol').value,
+                mwt: document.getElementById('moldWt').value,
+                gs: document.getElementById('gsOversize').value,
+                pov: document.getElementById('pOversize').value,
+                weights: waterContentSteps.map((_, i) => document.getElementById(`totalWt_${i}`).value)
+            };
+            localStorage.setItem('EJUST_PROCTOR_CACHE', JSON.stringify(data));
+        }
+
+        function loadSavedData() {
+            const cache = localStorage.getItem('EJUST_PROCTOR_CACHE');
+            if (!cache) return;
+            const data = JSON.parse(cache);
+            document.getElementById('projName').value = data.proj || "";
+            document.getElementById('sampleDesc').value = data.desc || "";
+            document.getElementById('testDate').value = data.date || "";
+            document.getElementById('moldVol').value = data.vol || "";
+            document.getElementById('moldWt').value = data.mwt || "";
+            document.getElementById('gsOversize').value = data.gs || "";
+            document.getElementById('pOversize').value = data.pov || "";
+            if(data.weights) data.weights.forEach((v, i) => {
+                const el = document.getElementById(`totalWt_${i}`);
+                if(el) el.value = v;
+            });
+            calculateProctor();
         }
     </script>
 </body>
