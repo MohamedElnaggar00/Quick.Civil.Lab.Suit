@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proctor Compaction Report - E-JUST Lab</title>
+    <title>Proctor Compaction - E-JUST Lab Standards</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -32,7 +32,7 @@
             .dark { background-color: white !important; }
         }
 
-        /* Bold Borders for Inputs */
+        /* Bold Borders for Inputs matched to Sieve Page */
         .bold-input {
             border: 2px solid #cbd5e1;
         }
@@ -52,7 +52,7 @@
 
     <div class="max-w-6xl mx-auto bg-white dark:bg-slate-900 rounded-xl shadow-xl overflow-hidden border-2 border-slate-200 dark:border-slate-800 report-card">
         
-        <!-- Header -->
+        <!-- Header: Matched to Sieve Analysis Style -->
         <div class="bg-slate-900 dark:bg-black px-4 sm:px-8 py-6 border-b-4 border-blue-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight uppercase leading-tight">Moisture-Density Relationship</h1>
@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        <!-- Metadata Section -->
+        <!-- Metadata Section: Matched to Sieve Analysis Style -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 sm:p-8 bg-slate-50/50 dark:bg-slate-800/30 border-b-2 border-slate-200 dark:border-slate-800">
             <div>
                 <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Project Name</label>
@@ -81,7 +81,7 @@
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Sample Description</label>
-                <input type="text" id="sampleDesc" oninput="autoSaveData()" placeholder="e.g. Base Course" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 font-semibold">
+                <input type="text" id="sampleDesc" oninput="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 font-semibold">
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Testing Date</label>
@@ -130,7 +130,7 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <!-- Input Table -->
+                <!-- Input Table: Matched Sieve Header and Shading -->
                 <div class="lg:col-span-5 space-y-4">
                     <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                         <div class="h-4 w-1 bg-slate-800 dark:bg-slate-200"></div>
@@ -140,7 +140,7 @@
                         <table class="w-full text-left border-collapse text-[11px]" style="min-width: 400px;">
                             <thead class="bg-slate-800 dark:bg-black text-white uppercase text-[9px] tracking-widest">
                                 <tr>
-                                    <th class="p-3 border-r border-slate-700 text-center w-16">W.C %</th>
+                                    <th class="p-3 border-r border-slate-700 text-center w-20">W.C %</th>
                                     <th class="p-3 border-r border-slate-700">Mold+Soil (g)</th>
                                     <th class="p-3 text-center bg-blue-900">Dry Density</th>
                                 </tr>
@@ -164,7 +164,7 @@
 
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                        <div class="bg-blue-900 dark:bg-blue-800 p-5 rounded-xl text-white shadow-lg">
+                        <div class="bg-slate-900 dark:bg-blue-800 p-5 rounded-xl text-white shadow-lg">
                             <span class="text-[8px] sm:text-[9px] font-bold text-blue-300 uppercase block mb-1">Max Dry Density (MDD)</span>
                             <div class="flex items-baseline gap-1">
                                 <span id="resMDD" class="text-2xl sm:text-3xl font-black tracking-tighter">0.000</span>
@@ -186,7 +186,7 @@
                 </div>
             </div>
 
-            <!-- Footer Actions -->
+            <!-- Footer: Matched to Sieve Analysis Style -->
             <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t-2 border-slate-200 dark:border-slate-800 gap-6 no-print">
                 <p class="text-[10px] text-slate-400 font-medium text-center md:text-left leading-relaxed">
                     © 2026 Mohamed Abdelazim • QC/QA Engineer - Egypt-Japan university
@@ -195,10 +195,10 @@
                     <button type="button" onclick="exportToCSV()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
                         CSV
                     </button>
-                    <button type="button" onclick="window.print()" class="flex-1 sm:flex-none bg-slate-800 dark:bg-slate-700 hover:bg-black text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
+                    <button type="button" onclick="window.print()" class="flex-1 sm:flex-none bg-slate-800 dark:bg-blue-700 hover:bg-black dark:hover:bg-blue-600 text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
                         PDF
                     </button>
-                    <button type="button" onclick="clearAllFields()" class="no-print text-slate-400 hover:text-red-600 text-[11px] font-bold transition px-2 uppercase">
+                    <button type="button" onclick="clearAllFields()" class="no-print text-slate-400 hover:text-red-600 text-[10px] font-bold transition px-2 uppercase tracking-tight">
                         Reset
                     </button>
                 </div>
@@ -227,10 +227,12 @@
             if (!myChart) return;
             const isDark = document.documentElement.classList.contains('dark');
             const color = isDark ? '#94a3b8' : '#475569';
+            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+            
             myChart.options.scales.x.ticks.color = color;
             myChart.options.scales.y.ticks.color = color;
-            myChart.options.scales.x.grid.color = isDark ? '#1e293b' : '#e2e8f0';
-            myChart.options.scales.y.grid.color = isDark ? '#1e293b' : '#e2e8f0';
+            myChart.options.scales.x.grid.color = gridColor;
+            myChart.options.scales.y.grid.color = gridColor;
             myChart.update();
         }
 
@@ -243,13 +245,13 @@
             const tableBody = document.getElementById('dataTable');
             waterContentSteps.forEach((wc, index) => {
                 const row = document.createElement('tr');
-                row.className = "hover:bg-slate-50 dark:hover:bg-slate-800 transition border-b border-slate-100 dark:border-slate-800 group";
+                row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition border-b border-slate-100 dark:border-slate-800";
                 row.innerHTML = `
-                    <td class="p-3 text-center bg-slate-50 dark:bg-slate-800/50 font-bold text-slate-400 border-r border-slate-100 dark:border-slate-800 font-mono text-[11px]">${wc}%</td>
+                    <td class="p-2.5 font-bold text-slate-500 dark:text-slate-400 border-r border-slate-100 dark:border-slate-800 font-mono text-center">${wc}%</td>
                     <td class="p-1 border-r border-slate-100 dark:border-slate-800">
                         <input type="number" id="totalWt_${index}" step="0.1" class="bold-input w-full text-center bg-transparent rounded outline-none font-mono font-bold text-blue-900 dark:text-blue-400 py-1 transition-colors">
                     </td>
-                    <td class="p-3 text-center font-mono font-bold text-sm transition" id="dryDens_${index}">-</td>
+                    <td class="p-2.5 text-center font-mono font-bold text-blue-700 dark:text-blue-400 bg-blue-50/40 dark:bg-blue-900/10" id="dryDens_${index}">-</td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -303,12 +305,10 @@
                 if (vol > 0 && totalWt > mwt) {
                     const dryDens = ((totalWt - mwt) / vol) / (1 + (wc / 100));
                     dryDisplay.innerText = dryDens.toFixed(3);
-                    dryDisplay.className = "p-3 text-center font-mono font-bold text-blue-700 dark:text-blue-400 text-sm";
                     dryDensities.push({ x: wc, y: dryDens });
                     chartData.push(dryDens);
                 } else {
                     dryDisplay.innerText = "-";
-                    dryDisplay.className = "p-3 text-center font-mono font-bold text-slate-300 dark:text-slate-700 text-sm";
                     chartData.push(null);
                 }
             });
