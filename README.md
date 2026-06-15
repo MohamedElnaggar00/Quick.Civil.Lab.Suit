@@ -1,62 +1,76 @@
-# Engineering Laboratory Information System (ELIS)
-### Unified Geotechnical & Quality Control Suite
-**Developed by:** Mohamed Abdelazim  
-**Affiliation:** Lab Engineer, Egypt-Japan University for Science and Technology (E-JUST)
+Geotechnical & Materials Engineering Lab Suite
 
----
+A comprehensive collection of lightweight, high-performance web applications
+designed for civil engineering laboratory testing and Quality Control (QC/QA)
+reporting.
 
-## 🔬 Overview
-The **Engineering Lab Suite** is a professional-grade web portal designed for civil and geotechnical engineers to perform critical laboratory calculations with high precision. This suite adheres to international standards including **AASHTO** and **ASTM**, providing instant analysis, statistical cleansing, and visualization of laboratory data.
+📋 Project Overview
 
-## 🛠 Included Applications
+This suite provides browser-based tools for common geotechnical and construction
+material tests. These apps eliminate the need for manual spreadsheets by
+providing instant calculations, statistical analysis, and professional reporting
+directly from the field or laboratory.
 
-### 1. Sand Cone Density Analysis 🏜️
-*   **Standards:** AASHTO T 191 / ASTM D1556.
-*   **Features:** Field density calculations, volume of hole determination, and relative density reporting.
+Included Applications:
 
-### 2. Compressive Strength Averager 🏗️
-*   **Logic:** Features a **2-Cycle Statistical Outlier Cleanse**.
-*   **Features:** Automatically filters samples deviating by more than ±20% from the mean across two consecutive verification passes to ensure ASTM compliance.
+1.  Field Density Report (Sand Cone Method): Automated calculation of relative
+    density and field dry density.
+2.  Compressive Strength Report: Statistical analysis of concrete/mortar samples
+    with automated outlier detection.
+3.  Soil Classification Tool: Group classification and Group Index (GI)
+    calculation based on AASHTO/ASTM standards.
+4.  Proctor Compaction Report: Relationship analysis between moisture and
+    density with automated curve plotting and oversize correction.
 
-### 3. AASHTO Soil Classification 🌍
-*   **Standards:** AASHTO M 145 / ASTM D3282.
-*   **Features:** Instant determination of Soil Group, Group Index (GI), and Subgrade Rating based on Sieve and Atterberg inputs.
+🚀 Core Features
 
-### 4. Proctor Compaction Test 📈
-*   **Standards:** AASHTO T 99 / T 180.
-*   **Features:** Dynamic **Compaction Curve plotting** using Chart.js. Includes **Oversize Correction (ASTM D4718)** for materials containing gravel.
+  - Engineering Precision: Calculations strictly follow international standards
+    (AASHTO T191, T99, T180, M145 and ASTM D1556, C39, D3282, D4718).
+  - Adaptive Dark Mode: High-contrast dark theme for low-light lab environments,
+    persistent via localStorage.
+  - CSV Export Engine: One-click data extraction for seamless integration with
+    Microsoft Excel or Google Sheets.
+  - Mobile-First Design: Optimized for field use on tablets and smartphones with
+    touch-friendly inputs and bold UI borders.
+  - Client-Side Auto-Save: Automatically caches data in the browser so work is
+    never lost due to page refreshes.
+  - Print-Ready Reports: Professional formatting for physical paper or PDFs,
+    removing navigation buttons automatically.
 
-### 5. Atterberg Limits & Free Swell 💧
-*   **Standards:** AASHTO T 89, T 90 / ASTM D4318.
-*   **Features:** 
-    *   Linear regression on a semi-log scale for Liquid Limit (LL) at 25 blows.
-    *   Live **Casagrande Plasticity Chart** plotting.
-    *   Free Swelling Index (FSI) calculation.
+🛠️ Technical Stack
 
-### 6. Sieve Analysis (Gradation) 📐
-*   **Logic:** Advanced Log-Linear Interpolation.
-*   **Features:** 
-    *   Replicates VBA-style interpolation for **D10, D30, and D60**.
-    *   Automated Uniformity (Cu) and Curvature (Cc) calculation.
-    *   Semi-logarithmic Grain Size Distribution curve.
+  - Frontend: HTML5, CSS3, JavaScript (ES6+).
+  - Styling: Tailwind CSS 3.x.
+  - Data Visualization: Chart.js (Compaction Curves).
+  - Persistence: Browser localStorage API.
 
----
+🤖 Development & AI Collaboration
 
-## 🚀 Technical Highlights
-*   **Client-Side Processing:** All calculations are performed instantly in the browser.
-*   **Local Persistence:** Uses `localStorage` to cache your laboratory data so it remains available if you refresh the page.
-*   **Print-to-PDF:** Every application is optimized with `@media print` CSS to generate clean, professional laboratory submittals.
-*   **Responsive UI:** Built with **Tailwind CSS** for a professional look on tablets, laptops, and mobile devices.
+This project was engineered and developed through a collaborative partnership
+between human expertise and Artificial Intelligence,  with the assistance of Google Gemini (Advanced
+    Large Language Models.
+      - Gemini was utilized for code architecture, Tailwind CSS optimization,
+        dark mode implementation, and the development of the CSV export
+        functionality.
 
-## 📖 How to Deploy
-1. Clone this repository or download the HTML files.
-2. Ensure `index.html` remains in the root directory alongside the tool files.
-3. Access the suite via **GitHub Pages** or any static web server.
+⚖️ Engineering Standards Compliance
 
----
+| Test                     | Standard Reference        |
+| :----------------------- | :------------------------ |
+| **Sand Cone**            | AASHTO T 191 / ASTM D1556 |
+| **Compressive Strength** | ASTM C39 / EN 12390       |
+| **Soil Classification**  | AASHTO M 145 / ASTM D3282 |
+| **Proctor Compaction**   | AASHTO T 99 / T 180       |
 
-## ⚖️ License & Copyright
-© 2026 Mohamed A. Elnaggar  
-This software is provided for engineering and educational purposes. Developed at the **Egypt-Japan University for Science and Technology (E-JUST)**.
+👤 Author
 
-> **Note:** For official engineering submittals, results should be verified by a licensed professional engineer.
+Mohamed A. Elnaggar
+
+  - Lab Engineer, Civil Engineering Testing and Consulting Unit - Egypt-Japan University of Science and Technology (E-JUST).
+
+📜 License
+
+This project is licensed under the MIT License - see the LICENSE file for
+details.
+
+© 2026 Mohamed Abdelazim • Engineering Quality Control Systems
