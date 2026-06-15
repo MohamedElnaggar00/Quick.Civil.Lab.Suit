@@ -50,8 +50,7 @@ Included Applications:
 
 🤖 Development & AI Collaboration
 
-This project represents a modern approach to engineering software development, developed with the assistance of Google Gemini (Advanced
-    Large Language Models).
+This project represents a modern approach to engineering software development, developed with the assistance of Google Gemini
       - The AI was utilized to optimize the Tailwind CSS architecture, implement
         the persistent dark mode system, build the CSV export engine, and assist
         in complex mathematical interpolations (Log-Linear) for sieve analysis.
