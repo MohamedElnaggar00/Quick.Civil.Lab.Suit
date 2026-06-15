@@ -4,7 +4,7 @@ A comprehensive collection of lightweight, high-performance web applications
 designed for civil engineering laboratory testing and Quality Control (QC/QA)
 reporting.
 
-## Try it NOW! mohamedelnaggar00.github.io/Quick.Civil.Lab.Suit
+# [Try it NOW!](https://mohamedelnaggar00.github.io/Quick.Civil.Lab.Suit/)
 
 📋 Project Overview
 
