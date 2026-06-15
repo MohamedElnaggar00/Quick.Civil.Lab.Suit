@@ -125,3 +125,211 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 no-print">
+                    <button type="submit" class="flex-1 bg-slate-900 dark:bg-blue-700 hover:bg-black dark:hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition shadow-lg text-xs tracking-widest uppercase">
+                        Classify Soil
+                    </button>
+                    <button type="button" onclick="clearAllFields()" class="px-6 py-3 border-2 border-slate-200 dark:border-slate-700 text-slate-400 hover:text-red-600 transition text-xs font-bold uppercase rounded-lg">
+                        Reset
+                    </button>
+                </div>
+            </form>
+
+            <!-- Right Side: Classification Results -->
+            <div class="lg:col-span-6 space-y-6">
+                <div id="resultPlaceholder" class="h-full min-h-[250px] flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+                    <div class="text-slate-200 dark:text-slate-800 mb-4">
+                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.628.285a2 2 0 01-1.963 0l-.63-.285a6 6 0 00-3.86-.517l-2.388.477a2 2 0 00-1.022.547V18a2 2 0 002 2h11a2 2 0 002-2v-2.572zM4 9a5 5 0 0110 0v.572c0 .54-.203 1.06-.57 1.458a2 2 0 01-2.188.517l-1.442-.655a2 2 0 00-1.6 0l-1.442.655a2 2 0 01-2.189-.517A2 2 0 014 9.572V9z"></path></svg>
+                    </div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Awaiting Lab Data</p>
+                </div>
+
+                <div id="resultDisplay" class="hidden space-y-4 sm:space-y-6">
+                    <div class="bg-blue-900 dark:bg-blue-800 p-6 rounded-xl shadow-lg text-white text-center relative overflow-hidden">
+                        <span class="text-[9px] font-bold text-blue-300 uppercase tracking-[0.3em] block mb-2">AASHTO Group</span>
+                        <div id="soilGroup" class="text-4xl sm:text-5xl font-black tracking-tighter">A-1-a (0)</div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-2 sm:gap-3">
+                        <div class="bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 p-3 sm:p-4 rounded-lg flex justify-between items-center">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">Material Type</span>
+                            <span id="materialType" class="text-[11px] font-bold text-slate-700 dark:text-slate-200 text-right">Granular</span>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 p-3 sm:p-4 rounded-lg flex justify-between items-center">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">Rating</span>
+                            <span id="subgradeRating" class="text-[11px] font-bold text-slate-700 dark:text-slate-200">Excellent</span>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 p-3 sm:p-4 rounded-lg">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase block mb-1">Typical Constituents</span>
+                            <span id="constituents" class="text-[11px] font-medium text-slate-600 dark:text-slate-400 italic">...</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/80 border-t-4 border-blue-800 p-4 rounded-lg flex justify-between items-center shadow-inner">
+                            <span class="text-[10px] font-bold text-blue-900 dark:text-blue-400 uppercase">Group Index (GI)</span>
+                            <span id="exactGI" class="text-base font-mono font-black text-blue-900 dark:text-blue-400">0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="errorDisplay" class="hidden bg-rose-50 dark:bg-rose-900/20 border-2 border-rose-200 dark:border-rose-800 p-4 rounded-lg text-rose-700 dark:text-rose-400 text-xs font-bold flex items-center gap-3">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    <span id="errorText"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Updated Footer -->
+        <div class="flex flex-col md:flex-row justify-between items-center p-6 sm:p-8 border-t-2 border-slate-100 dark:border-slate-800 gap-6 no-print">
+            <p class="text-[10px] text-slate-400 font-medium text-center md:text-left leading-relaxed">
+                © 2026 Mohamed Abdelazim • QC/QA Engineer - Egypt-Japan university
+            </p>
+            <div class="flex w-full sm:w-auto gap-3">
+                <button onclick="exportToCSV()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
+                    Export CSV
+                </button>
+                <button onclick="window.print()" class="flex-1 sm:flex-none bg-slate-800 dark:bg-slate-700 hover:bg-black text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
+                    Print PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcons();
+        }
+
+        function updateThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            document.getElementById('sun-icon').classList.toggle('hidden', !isDark);
+            document.getElementById('moon-icon').classList.toggle('hidden', isDark);
+        }
+
+        function calculateAASHTO() {
+            const p10 = parseFloat(document.getElementById('p10').value) || 0;
+            const p40 = parseFloat(document.getElementById('p40').value) || 0;
+            const p200 = parseFloat(document.getElementById('p200').value) || 0;
+            const ll = parseFloat(document.getElementById('ll').value) || 0;
+            const pi = parseFloat(document.getElementById('pi').value) || 0;
+
+            const errDiv = document.getElementById('errorDisplay');
+            const placeholder = document.getElementById('resultPlaceholder');
+            const display = document.getElementById('resultDisplay');
+
+            if (p10 < p40 || p40 < p200) {
+                document.getElementById('errorText').innerText = "Sieve logic error: % Passing No.10 must be ≥ No.40 ≥ No.200";
+                errDiv.classList.remove('hidden');
+                display.classList.add('hidden');
+                return;
+            }
+            errDiv.classList.add('hidden');
+
+            let group = "", gi = 0, matType = "", rating = "", constituents = "";
+
+            if (p200 <= 35) {
+                matType = "Granular (≤ 35% pass No. 200)";
+                if (p10 <= 50 && p40 <= 30 && p200 <= 15 && pi <= 6) { group = "A-1-a"; gi = 0; }
+                else if (p40 <= 50 && p200 <= 25 && pi <= 6) { group = "A-1-b"; gi = 0; }
+                else if (p40 >= 51 && p200 <= 10 && pi <= 0) { group = "A-3"; gi = 0; }
+                else {
+                    if (ll <= 40) group = pi <= 10 ? "A-2-4" : "A-2-6";
+                    else group = pi <= 10 ? "A-2-5" : "A-2-7";
+                    gi = 0.01 * (p200 - 15) * (pi - 10);
+                }
+            } else {
+                matType = "Silt-Clay (> 35% pass No. 200)";
+                if (ll <= 40) group = pi <= 10 ? "A-4" : "A-6";
+                else {
+                    if (pi <= 10) group = "A-5";
+                    else group = (pi <= (ll - 30)) ? "A-7-5" : "A-7-6";
+                }
+                gi = (p200 - 35) * (0.2 + 0.005 * (ll - 40)) + 0.01 * (p200 - 15) * (pi - 10);
+            }
+
+            gi = Math.max(0, gi);
+            const roundedGI = Math.round(gi);
+
+            if (["A-1-a", "A-1-b", "A-3"].includes(group)) { rating = "Excellent to Good"; constituents = group === "A-3" ? "Fine sand" : "Stone fragments, gravel, sand"; }
+            else if (group.startsWith("A-2")) { constituents = "Silty or clayey gravel and sand"; rating = ["A-2-4", "A-2-5"].includes(group) ? "Excellent to Good" : "Fair to Poor"; }
+            else { rating = "Fair to Poor"; constituents = group.startsWith("A-4") || group.startsWith("A-5") ? "Silty soils" : "Clayey soils"; }
+
+            document.getElementById('soilGroup').innerText = `${group} (${roundedGI})`;
+            document.getElementById('materialType').innerText = matType;
+            document.getElementById('subgradeRating').innerText = rating;
+            document.getElementById('constituents').innerText = constituents;
+            document.getElementById('exactGI').innerText = gi.toFixed(2);
+
+            placeholder.classList.add('hidden');
+            display.classList.remove('hidden');
+            autoSaveData();
+        }
+
+        function exportToCSV() {
+            let csv = ["SOIL CLASSIFICATION REPORT"];
+            csv.push(`Project,${document.getElementById('projName').value || 'N/A'}`);
+            csv.push(`Date,${document.getElementById('testDate').value || 'N/A'}`);
+            csv.push(`Classification,${document.getElementById('soilGroup').innerText}`);
+            csv.push(`Group Index,${document.getElementById('exactGI').innerText}`);
+            csv.push("");
+            csv.push("Test,Value");
+            csv.push(`Passing No.10,${document.getElementById('p10').value}`);
+            csv.push(`Passing No.40,${document.getElementById('p40').value}`);
+            csv.push(`Passing No.200,${document.getElementById('p200').value}`);
+            csv.push(`Liquid Limit,${document.getElementById('ll').value}`);
+            csv.push(`Plasticity Index,${document.getElementById('pi').value}`);
+
+            const blob = new Blob([csv.join("\n")], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Soil_Report_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        function autoSaveData() {
+            const data = {
+                proj: document.getElementById('projName').value,
+                date: document.getElementById('testDate').value,
+                loc: document.getElementById('testLoc').value,
+                p10: document.getElementById('p10').value,
+                p40: document.getElementById('p40').value,
+                p200: document.getElementById('p200').value,
+                ll: document.getElementById('ll').value,
+                pi: document.getElementById('pi').value
+            };
+            localStorage.setItem('EJUST_SOIL_CACHE', JSON.stringify(data));
+        }
+
+        function loadSavedData() {
+            const cache = localStorage.getItem('EJUST_SOIL_CACHE');
+            if (!cache) return;
+            const data = JSON.parse(cache);
+            document.getElementById('projName').value = data.proj || "";
+            document.getElementById('testDate').value = data.date || "";
+            document.getElementById('testLoc').value = data.loc || "";
+            document.getElementById('p10').value = data.p10 || "";
+            document.getElementById('p40').value = data.p40 || "";
+            document.getElementById('p200').value = data.p200 || "";
+            document.getElementById('ll').value = data.ll || "";
+            document.getElementById('pi').value = data.pi || "";
+        }
+
+        function clearAllFields() {
+            if(confirm("Reset sheet?")) {
+                localStorage.removeItem('EJUST_SOIL_CACHE');
+                location.reload();
+            }
+        }
+
+        window.onload = () => {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            updateThemeIcons();
+            loadSavedData();
+        };
+    </script>
+</body>
+</html>
