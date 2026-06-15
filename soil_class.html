@@ -5,288 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soil Classification Report - E-JUST Lab Standards</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { ejust: '#1e3a8a' }
+                }
+            }
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
         
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease; }
         .font-mono { font-family: 'JetBrains+Mono', monospace; }
         
+        html { -webkit-text-size-adjust: 100%; }
+
         @media print {
             .no-print { display: none !important; }
-            body { background-color: white !important; padding: 0 !important; }
-            .report-card { border: 1px solid #d1d5db !important; box-shadow: none !important; }
-            input { border-bottom: 1px solid #e2e8f0 !important; }
+            body { background-color: white !important; color: black !important; padding: 0 !important; }
+            .report-card { border: 1px solid #d1d5db !important; box-shadow: none !important; background: white !important; }
+            input { border-bottom: 2px solid #000 !important; color: black !important; }
+            .dark { background-color: white !important; }
         }
 
-        .bg-ejust-dark { background-color: #0f172a; }
-        .border-ejust { border-color: #1e3a8a; }
+        /* Bold Borders for Inputs */
+        .bold-input {
+            border: 2px solid #cbd5e1; /* slate-300 */
+        }
+        .dark .bold-input {
+            border: 2px solid #475569; /* slate-600 */
+        }
+        .bold-input:focus {
+            border-color: #1d4ed8; /* blue-700 */
+            box-shadow: 0 0 0 1px #1d4ed8;
+        }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8 text-slate-900">
+<body class="bg-slate-50 dark:bg-slate-950 min-h-screen py-4 sm:py-8 px-2 sm:px-6 lg:px-8 text-slate-900 dark:text-slate-100 transition-colors duration-300">
 
-    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-slate-200 report-card">
+    <div class="max-w-5xl mx-auto bg-white dark:bg-slate-900 rounded-xl shadow-xl overflow-hidden border-2 border-slate-200 dark:border-slate-800 report-card">
         
         <!-- Header Section -->
-        <div class="bg-slate-900 px-8 py-6 border-b-4 border-blue-800">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-white tracking-tight uppercase">Soil Classification Report</h1>
-                    <p class="text-blue-400 text-xs font-semibold tracking-[0.15em] mt-1 uppercase">
-                        AASHTO M 145 / ASTM D3282 Standards
-                    </p>
-                </div>
+        <div class="bg-slate-900 dark:bg-black px-4 sm:px-8 py-6 border-b-4 border-blue-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight uppercase">Soil Classification Report</h1>
+                <p class="text-blue-400 text-[10px] sm:text-xs font-semibold tracking-[0.15em] mt-1 uppercase">
+                    AASHTO M 145 / ASTM D3282
+                </p>
+            </div>
+            
+            <div class="flex items-center justify-between w-full md:w-auto gap-4">
+                <!-- Dark Mode Toggle -->
+                <button onclick="toggleDarkMode()" class="no-print p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors" title="Toggle Dark Mode">
+                    <svg id="sun-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                    <svg id="moon-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                </button>
                 <div class="text-right">
-                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Authorized Laboratory Engineer</p>
-                    <p class="text-white text-xs font-medium">Mohamed Abdelazim</p>
-                    <p class="text-slate-400 text-[9px]">E-JUST University, Egypt</p>
+                    <p class="text-slate-400 text-[9px] uppercase font-bold tracking-widest leading-none">E-JUST Lab</p>
+                    <p class="text-white text-[11px] font-medium leading-tight">Technical Report</p>
                 </div>
             </div>
         </div>
 
         <!-- Metadata Section -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-8 bg-slate-50/50 border-b border-slate-200">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 sm:p-8 bg-slate-50/50 dark:bg-slate-800/30 border-b-2 border-slate-200 dark:border-slate-800">
             <div class="md:col-span-2">
-                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Project Description</label>
-                <input type="text" id="projName" oninput="autoSaveData()" placeholder="Enter project name..." class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 font-semibold transition-colors">
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Project Description</label>
+                <input type="text" id="projName" oninput="autoSaveData()" placeholder="Enter project name..." class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 font-semibold transition-colors">
             </div>
             <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Testing Date</label>
-                <input type="date" id="testDate" oninput="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 transition-colors">
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Testing Date</label>
+                <input type="date" id="testDate" oninput="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 transition-colors">
             </div>
             <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Location / Boring No.</label>
-                <input type="text" id="testLoc" oninput="autoSaveData()" placeholder="e.g. BH-01 @ 2.0m" class="w-full bg-transparent border-b-2 border-slate-200 focus:border-blue-700 outline-none text-sm py-1 transition-colors">
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Location / Boring</label>
+                <input type="text" id="testLoc" oninput="autoSaveData()" placeholder="e.g. BH-01" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 transition-colors">
             </div>
         </div>
 
-        <div class="p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
             <!-- Left Side: Laboratory Data Inputs -->
             <form id="soilForm" class="lg:col-span-6 space-y-6" onsubmit="event.preventDefault(); calculateAASHTO();">
-                <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+                <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                     <div class="h-4 w-1 bg-blue-700"></div>
-                    <h3 class="text-xs font-bold uppercase text-slate-700">Laboratory Test Data</h3>
+                    <h3 class="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Laboratory Test Data</h3>
                 </div>
                 
-                <div class="overflow-hidden border border-slate-200 rounded-lg shadow-sm">
+                <div class="overflow-hidden border-2 border-slate-200 dark:border-slate-700 rounded-lg shadow-sm">
                     <table class="w-full text-xs text-left">
-                        <thead class="bg-slate-800 text-slate-200 uppercase text-[9px] tracking-widest">
+                        <thead class="bg-slate-800 dark:bg-black text-slate-200 uppercase text-[9px] tracking-widest">
                             <tr>
-                                <th class="p-3">Test Description</th>
-                                <th class="p-3 text-center">Result / Value</th>
+                                <th class="p-3">Sieve / Test</th>
+                                <th class="p-3 text-center">Result</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100 bg-white">
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900/50">
                             <tr>
-                                <td class="p-3 font-semibold text-slate-600">Passing No. 10 Sieve (2.00 mm) %</td>
-                                <td class="p-2"><input type="number" id="p10" step="0.01" placeholder="0.00" class="w-full text-center outline-none font-mono font-bold text-blue-900"></td>
+                                <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">% Passing No. 10</td>
+                                <td class="p-2"><input type="number" id="p10" step="0.01" class="bold-input w-full text-center p-1.5 rounded outline-none font-mono font-bold text-blue-900 dark:text-blue-400 bg-transparent"></td>
                             </tr>
                             <tr>
-                                <td class="p-3 font-semibold text-slate-600">Passing No. 40 Sieve (0.425 mm) %</td>
-                                <td class="p-2"><input type="number" id="p40" step="0.01" placeholder="0.00" class="w-full text-center outline-none font-mono font-bold text-blue-900"></td>
+                                <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">% Passing No. 40</td>
+                                <td class="p-2"><input type="number" id="p40" step="0.01" class="bold-input w-full text-center p-1.5 rounded outline-none font-mono font-bold text-blue-900 dark:text-blue-400 bg-transparent"></td>
                             </tr>
                             <tr>
-                                <td class="p-3 font-semibold text-slate-600">Passing No. 200 Sieve (0.075 mm) %</td>
-                                <td class="p-2"><input type="number" id="p200" step="0.01" placeholder="0.00" class="w-full text-center outline-none font-mono font-bold text-blue-900"></td>
+                                <td class="p-3 font-semibold text-slate-600 dark:text-slate-400">% Passing No. 200</td>
+                                <td class="p-2"><input type="number" id="p200" step="0.01" class="bold-input w-full text-center p-1.5 rounded outline-none font-mono font-bold text-blue-900 dark:text-blue-400 bg-transparent"></td>
                             </tr>
                             <tr>
-                                <td class="p-3 font-semibold text-slate-600 italic">Liquid Limit (LL)</td>
-                                <td class="p-2"><input type="number" id="ll" step="0.01" placeholder="0.00" class="w-full text-center outline-none font-mono font-bold text-slate-700"></td>
+                                <td class="p-3 font-semibold text-slate-600 dark:text-slate-400 italic">Liquid Limit (LL)</td>
+                                <td class="p-2"><input type="number" id="ll" step="0.01" class="bold-input w-full text-center p-1.5 rounded outline-none font-mono font-bold text-slate-700 dark:text-slate-300 bg-transparent"></td>
                             </tr>
                             <tr>
-                                <td class="p-3 font-semibold text-slate-600 italic">Plasticity Index (PI)</td>
-                                <td class="p-2"><input type="number" id="pi" step="0.01" placeholder="0.00" class="w-full text-center outline-none font-mono font-bold text-slate-700"></td>
+                                <td class="p-3 font-semibold text-slate-600 dark:text-slate-400 italic">Plasticity Index (PI)</td>
+                                <td class="p-2"><input type="number" id="pi" step="0.01" class="bold-input w-full text-center p-1.5 rounded outline-none font-mono font-bold text-slate-700 dark:text-slate-300 bg-transparent"></td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
-
-                <div class="flex gap-3 no-print">
-                    <button type="submit" class="flex-1 bg-slate-900 hover:bg-black text-white font-bold py-3 px-4 rounded-lg transition shadow-lg text-xs tracking-widest uppercase">
-                        Classify Soil
-                    </button>
-                    <button type="button" onclick="clearAllFields()" class="px-6 py-3 border border-slate-200 text-slate-400 hover:text-red-600 transition text-xs font-bold uppercase rounded-lg">
-                        Reset
-                    </button>
-                </div>
-            </form>
-
-            <!-- Right Side: Classification Results -->
-            <div class="lg:col-span-6 space-y-6">
-                <div id="resultPlaceholder" class="h-full flex flex-col items-center justify-center text-center p-12 border-2 border-dashed border-slate-100 rounded-xl">
-                    <div class="text-slate-200 mb-4">
-                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.628.285a2 2 0 01-1.963 0l-.63-.285a6 6 0 00-3.86-.517l-2.388.477a2 2 0 00-1.022.547V18a2 2 0 002 2h11a2 2 0 002-2v-2.572zM4 9a5 5 0 0110 0v.572c0 .54-.203 1.06-.57 1.458a2 2 0 01-2.188.517l-1.442-.655a2 2 0 00-1.6 0l-1.442.655a2 2 0 01-2.189-.517A2 2 0 014 9.572V9z"></path></svg>
-                    </div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Awaiting Lab Data</p>
-                </div>
-
-                <div id="resultDisplay" class="hidden space-y-6">
-                    <!-- Main Badge -->
-                    <div class="bg-blue-900 p-6 rounded-xl shadow-lg text-white text-center relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-2 opacity-10">
-                            <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
-                        </div>
-                        <span class="text-[10px] font-bold text-blue-300 uppercase tracking-[0.3em] block mb-2">AASHTO Group Classification</span>
-                        <div id="soilGroup" class="text-5xl font-black tracking-tighter">A-1-a (0)</div>
-                    </div>
-
-                    <!-- Details Grid -->
-                    <div class="grid grid-cols-1 gap-3">
-                        <div class="bg-white border border-slate-200 p-4 rounded-lg flex justify-between items-center">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">General Material</span>
-                            <span id="materialType" class="text-xs font-bold text-slate-700">Granular</span>
-                        </div>
-                        <div class="bg-white border border-slate-200 p-4 rounded-lg flex justify-between items-center">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Subgrade Rating</span>
-                            <span id="subgradeRating" class="text-xs font-bold text-slate-700">Excellent</span>
-                        </div>
-                        <div class="bg-white border border-slate-200 p-4 rounded-lg">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Typical Constituents</span>
-                            <span id="constituents" class="text-xs font-medium text-slate-600 leading-relaxed italic">Stone fragments, gravel, and sand</span>
-                        </div>
-                        <div class="bg-slate-50 border-t-2 border-blue-800 p-4 rounded-lg flex justify-between items-center">
-                            <span class="text-[10px] font-bold text-blue-900 uppercase">Precise Group Index (GI)</span>
-                            <span id="exactGI" class="text-sm font-mono font-black text-blue-900">0.00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="errorDisplay" class="hidden bg-rose-50 border border-rose-200 p-4 rounded-lg text-rose-700 text-xs font-bold flex items-center gap-3">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                    <span id="errorText"></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="flex flex-col md:flex-row justify-between items-center p-8 border-t border-slate-100 gap-4 no-print">
-            <p class="text-[10px] text-slate-500 font-medium text-center md:text-left leading-relaxed">
-                Provided by Mohamed Abdelazim. Lab Engineer,<br>
-                Egypt-Japan university for science and technology.
-            </p>
-            <div class="flex gap-3">
-                <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold py-2 px-5 rounded transition flex items-center gap-2 uppercase tracking-wider">
-                    Export CSV
-                </button>
-                <button onclick="window.print()" class="bg-slate-800 hover:bg-black text-white text-[11px] font-bold py-2 px-6 rounded transition shadow-md uppercase tracking-wider">
-                    Print PDF
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Print Footer -->
-    <div class="hidden print:block mt-8 text-[9px] text-slate-400 text-center italic">
-        Soil Classification provided by Mohamed Abdelazim • E-JUST University Laboratory
-    </div>
-
-    <script>
-        function calculateAASHTO() {
-            const p10 = parseFloat(document.getElementById('p10').value);
-            const p40 = parseFloat(document.getElementById('p40').value);
-            const p200 = parseFloat(document.getElementById('p200').value);
-            const ll = parseFloat(document.getElementById('ll').value);
-            const pi = parseFloat(document.getElementById('pi').value);
-
-            const errDiv = document.getElementById('errorDisplay');
-            const placeholder = document.getElementById('resultPlaceholder');
-            const display = document.getElementById('resultDisplay');
-
-            // Logic Validation
-            if (p10 < p40 || p40 < p200) {
-                document.getElementById('errorText').innerText = "Sieve logic error: % Passing No.10 must be ≥ No.40 ≥ No.200";
-                errDiv.classList.remove('hidden');
-                display.classList.add('hidden');
-                return;
-            }
-            errDiv.classList.add('hidden');
-
-            let group = "", gi = 0, matType = "", rating = "", constituents = "";
-
-            if (p200 <= 35) {
-                matType = "Granular Materials (≤ 35% passing No. 200)";
-                if (p10 <= 50 && p40 <= 30 && p200 <= 15 && pi <= 6) { group = "A-1-a"; gi = 0; }
-                else if (p40 <= 50 && p200 <= 25 && pi <= 6) { group = "A-1-b"; gi = 0; }
-                else if (p40 >= 51 && p200 <= 10 && pi <= 0) { group = "A-3"; gi = 0; }
-                else {
-                    if (ll <= 40) group = pi <= 10 ? "A-2-4" : "A-2-6";
-                    else group = pi <= 10 ? "A-2-5" : "A-2-7";
-                    gi = 0.01 * (p200 - 15) * (pi - 10);
-                }
-            } else {
-                matType = "Silt-Clay Materials (> 35% passing No. 200)";
-                if (ll <= 40) group = pi <= 10 ? "A-4" : "A-6";
-                else {
-                    if (pi <= 10) group = "A-5";
-                    else group = (pi <= (ll - 30)) ? "A-7-5" : "A-7-6";
-                }
-                gi = (p200 - 35) * (0.2 + 0.005 * (ll - 40)) + 0.01 * (p200 - 15) * (pi - 10);
-            }
-
-            gi = Math.max(0, gi);
-            const roundedGI = Math.round(gi);
-
-            // Set Descriptions
-            if (["A-1-a", "A-1-b", "A-3"].includes(group)) { rating = "Excellent to Good"; constituents = group === "A-3" ? "Fine sand" : "Stone fragments, gravel, sand"; }
-            else if (group.startsWith("A-2")) { constituents = "Silty or clayey gravel and sand"; rating = ["A-2-4", "A-2-5"].includes(group) ? "Excellent to Good" : "Fair to Poor"; }
-            else { rating = "Fair to Poor"; constituents = group.startsWith("A-4") || group.startsWith("A-5") ? "Silty soils" : "Clayey soils"; }
-
-            // UI Update
-            document.getElementById('soilGroup').innerText = `${group} (${roundedGI})`;
-            document.getElementById('materialType').innerText = matType;
-            document.getElementById('subgradeRating').innerText = rating;
-            document.getElementById('constituents').innerText = constituents;
-            document.getElementById('exactGI').innerText = gi.toFixed(2);
-
-            placeholder.classList.add('hidden');
-            display.classList.remove('hidden');
-            autoSaveData();
-        }
-
-        function autoSaveData() {
-            const data = {
-                proj: document.getElementById('projName').value,
-                date: document.getElementById('testDate').value,
-                loc: document.getElementById('testLoc').value,
-                p10: document.getElementById('p10').value,
-                p40: document.getElementById('p40').value,
-                p200: document.getElementById('p200').value,
-                ll: document.getElementById('ll').value,
-                pi: document.getElementById('pi').value
-            };
-            localStorage.setItem('EJUST_SOIL_CACHE', JSON.stringify(data));
-        }
-
-        function loadSavedData() {
-            const cache = localStorage.getItem('EJUST_SOIL_CACHE');
-            if (!cache) return;
-            const data = JSON.parse(cache);
-            document.getElementById('projName').value = data.proj || "";
-            document.getElementById('testDate').value = data.date || "";
-            document.getElementById('testLoc').value = data.loc || "";
-            document.getElementById('p10').value = data.p10 || "";
-            document.getElementById('p40').value = data.p40 || "";
-            document.getElementById('p200').value = data.p200 || "";
-            document.getElementById('ll').value = data.ll || "";
-            document.getElementById('pi').value = data.pi || "";
-        }
-
-        function exportToCSV() {
-            const row = `${document.getElementById('projName').value},${document.getElementById('soilGroup').innerText},${document.getElementById('exactGI').innerText}`;
-            const blob = new Blob(["Project,Classification,Exact GI\n"+row], { type: 'text/csv' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = "Soil_Classification.csv";
-            a.click();
-        }
-
-        function clearAllFields() {
-            if(confirm("Wipe all data?")) {
-                localStorage.removeItem('EJUST_SOIL_CACHE');
-                location.reload();
-            }
-        }
-
-        window.onload = loadSavedData;
-    </script>
-</body>
-</html>
