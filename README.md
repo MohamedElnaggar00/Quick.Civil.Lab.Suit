@@ -1,4 +1,4 @@
-Geotechnical & Materials Engineering Lab Suite
+## Geotechnical & Materials Engineering Lab Suite
 
 A comprehensive collection of lightweight, high-performance web applications
 designed for civil engineering laboratory testing and Quality Control (QC/QA)
