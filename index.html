@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>E-JUST Lab Information System</title>
+  <title>Quick Civil Engineering Laboratory Calculator</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -110,13 +110,7 @@
     <div class="max-w-5xl mx-auto relative z-10">
       <div class="flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <p class="text-blue-400 text-xs font-bold tracking-[0.3em] uppercase mb-2">Unified Geotechnical Portal</p>
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight uppercase">Engineering Lab Suite</h1>
-        </div>
-        <div class="bg-slate-800/60 backdrop-blur-sm p-5 rounded-2xl border border-slate-700 text-right shrink-0">
-          <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest mb-1">Lead Laboratory Engineer</p>
-          <p class="text-lg font-bold text-white">Mohamed Abdelazim</p>
-          <p class="text-blue-400 text-xs font-medium uppercase tracking-wider">E-JUST University · Egypt</p>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight uppercase">Civil Engineering Lab Calculation Suit</h1>
         </div>
       </div>
     </div>
@@ -207,110 +201,48 @@
         <div class="flex items-start justify-between">
           <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:#dcfce7;">
             <svg class="w-5 h-5" style="color:#15803d;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
           </div>
-          <div class="dot dot-new" title="New module"></div>
+          <div class="dot dot-new" title="Newly added"></div>
         </div>
         <div>
           <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-0.5">Compaction</p>
-          <p class="text-[15px] font-bold leading-snug" style="color:#1e293b;">Proctor Compaction</p>
-          <p class="text-xs text-slate-500 mt-1 leading-relaxed">Find MDD and OMC, with automatic correction for oversized particles.</p>
+          <p class="text-[15px] font-bold leading-snug" style="color:#1e293b;">Proctor Analysis</p>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">Calculate MDD and OMC with automatic oversize rock correction.</p>
         </div>
         <div class="flex items-center justify-between pt-2 border-t border-slate-100 mt-auto">
-          <span class="text-[11px] text-slate-400">New</span>
-          <span class="tag" style="background:#dcfce7; color:#166534;">MDD / OMC</span>
-        </div>
-      </a>
-
-      <!-- Atterberg Limits -->
-      <a href="atterberg.html" class="lab-card" data-search="atterberg limits consistency plasticity liquid plastic">
-        <div class="flex items-start justify-between">
-          <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:#fee2e2;">
-            <svg class="w-5 h-5" style="color:#b91c1c;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10"/>
-            </svg>
-          </div>
-          <div class="dot dot-active" title="Used recently"></div>
-        </div>
-        <div>
-          <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-0.5">Plasticity</p>
-          <p class="text-[15px] font-bold leading-snug" style="color:#1e293b;">Atterberg Limits</p>
-          <p class="text-xs text-slate-500 mt-1 leading-relaxed">Compute liquid and plastic limits, and plot on a Casagrande chart.</p>
-        </div>
-        <div class="flex items-center justify-between pt-2 border-t border-slate-100 mt-auto">
-          <span class="text-[11px] text-slate-400">Used 1 week ago</span>
-          <span class="tag" style="background:#fee2e2; color:#991b1b;">LL / PL / PI</span>
-        </div>
-      </a>
-
-      <!-- Sieve Analysis -->
-      <a href="sieve.html" class="lab-card" data-search="sieve analysis gradation d10 d30 d60 particle size">
-        <div class="flex items-start justify-between">
-          <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:#fef3c7;">
-            <svg class="w-5 h-5" style="color:#b45309;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
-            </svg>
-          </div>
-          <div class="dot dot-idle" title="Not yet used"></div>
-        </div>
-        <div>
-          <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-0.5">Gradation</p>
-          <p class="text-[15px] font-bold leading-snug" style="color:#1e293b;">Sieve Analysis</p>
-          <p class="text-xs text-slate-500 mt-1 leading-relaxed">Plot particle-size distribution and extract D10, D30, and D60 values.</p>
-        </div>
-        <div class="flex items-center justify-between pt-2 border-t border-slate-100 mt-auto">
-          <span class="text-[11px] text-slate-400">Not yet used</span>
-          <span class="tag" style="background:#fef3c7; color:#92400e;">D10 / D60 / Cu</span>
+          <span class="text-[11px] text-blue-600 font-medium">New Module</span>
+          <span class="tag" style="background:#dcfce7; color:#166534;">ASTM D 1557</span>
         </div>
       </a>
 
     </div>
-
-    <p id="no-results" class="text-center text-slate-400 text-sm py-10" style="display:none;">No modules match your search.</p>
   </main>
 
-  <!-- ══ FOOTER ══ -->
-  <footer class="bg-white border-t border-slate-200 py-8 px-6">
-    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3 text-center">
-      <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Engineering Information Systems</p>
-      <p class="text-[11px] text-slate-500 italic">Provided by Mohamed Abdelazim · E-JUST University</p>
+  <footer class="bg-white border-t border-slate-200 py-8 px-6 text-center text-slate-500">
+    <div class="max-w-5xl mx-auto flex flex-col items-center gap-2">
+      <p class="text-sm font-medium">Provided by Mohamed Abdelazim - Lab Engineer</p>
+      <p class="text-[11px] uppercase tracking-widest text-slate-400 font-bold">E-JUST University - Egypt</p>
+      <p class="text-xs mt-2 opacity-60">© 2026 - All rights reserved.</p>
     </div>
   </footer>
 
   <script>
-    // ── Search ──
     function filterCards() {
-      const q = document.getElementById('search-input').value.toLowerCase();
+      const input = document.getElementById('search-input').value.toLowerCase();
       const cards = document.querySelectorAll('.lab-card');
-      let any = false;
-      cards.forEach(c => {
-        const match = (c.dataset.search || '').includes(q);
-        c.classList.toggle('card-hidden', !match);
-        if (match) any = true;
+      cards.forEach(card => {
+        const searchText = (card.getAttribute('data-search') || "").toLowerCase();
+        card.classList.toggle('card-hidden', !searchText.includes(input));
       });
-      document.getElementById('no-results').style.display = any ? 'none' : 'block';
     }
 
-    // ── Dark mode ──
-    let dark = false;
     function toggleDark() {
-      dark = !dark;
-      document.getElementById('root').classList.toggle('dark', dark);
-      document.body.classList.toggle('bg-slate-900', dark);
-      document.body.classList.toggle('bg-slate-50', !dark);
-      document.body.classList.toggle('text-slate-100', dark);
-      // Update card text colors for dark
-      document.querySelectorAll('.lab-card p[style*="1e293b"]').forEach(el => {
-        el.style.color = dark ? '#f1f5f9' : '#1e293b';
-      });
-      document.querySelectorAll('.lab-card p.text-slate-500').forEach(el => {
-        el.style.color = dark ? '#94a3b8' : '';
-      });
-      document.querySelectorAll('.lab-card .border-slate-100').forEach(el => {
-        el.style.borderColor = dark ? '#334155' : '';
-      });
-      document.getElementById('dark-btn').textContent = dark ? '☀️ Light' : '🌙 Dark';
+      const root = document.getElementById('root');
+      const btn = document.getElementById('dark-btn');
+      const isDark = root.classList.toggle('dark');
+      btn.innerHTML = isDark ? '☀️ Light' : '🌙 Dark';
     }
   </script>
 </body>
