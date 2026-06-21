@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sieve Analysis - E-JUST Lab Standards</title>
+    <title>Sieve Analysis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -18,12 +18,8 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap');
-        
         body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease; }
         .font-mono { font-family: 'JetBrains+Mono', monospace; }
-        
-        html { -webkit-text-size-adjust: 100%; }
-
         @media print {
             .no-print { display: none !important; }
             body { background-color: white !important; color: black !important; padding: 0 !important; }
@@ -31,24 +27,18 @@
             input { border-bottom: 2px solid #000 !important; color: black !important; }
             .dark { background-color: white !important; }
         }
-
-        /* Bold Borders for Inputs */
-        .bold-input {
-            border: 2px solid #cbd5e1;
-        }
-        .dark .bold-input {
-            border: 2px solid #475569;
-        }
-        .bold-input:focus {
-            border-color: #1d4ed8;
-            box-shadow: 0 0 0 1px #1d4ed8;
-        }
-
+        .bold-input { border: 2px solid #cbd5e1; }
+        .dark .bold-input { border: 2px solid #475569; }
+        .bold-input:focus { border-color: #1d4ed8; box-shadow: 0 0 0 1px #1d4ed8; }
         .custom-scrollbar::-webkit-scrollbar { height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 min-h-screen py-4 sm:py-8 px-2 sm:px-6 lg:px-8 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+
+    <a href="index.html" class="no-print fixed top-4 right-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2 rounded-full text-[10px] font-bold transition-all z-50 border border-slate-700 shadow-lg">
+        ← PORTAL
+    </a>
 
     <div class="max-w-6xl mx-auto bg-white dark:bg-slate-900 rounded-xl shadow-xl overflow-hidden border-2 border-slate-200 dark:border-slate-800 report-card">
         
@@ -57,7 +47,7 @@
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight uppercase leading-tight">Grain Size Analysis Report</h1>
                 <p class="text-blue-400 text-[10px] sm:text-xs font-semibold tracking-[0.15em] mt-1 uppercase">
-                    ASTM C136 / AASHTO T27 • Cum. Retained
+                    ASTM C136 / AASHTO T27 • Cumulative Retained Method
                 </p>
             </div>
             
@@ -67,15 +57,15 @@
                     <svg id="moon-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                 </button>
                 <div class="text-right">
-                    <p class="text-slate-400 text-[9px] uppercase font-bold tracking-widest leading-none">Civil Lab</p>
-                    <p class="text-white text-[11px] font-medium leading-tight">Technical Report</p>
+                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-none">Civil Lab</p>
+                    <p class="text-white text-xs font-medium leading-tight">Technical Report</p>
                 </div>
             </div>
         </div>
 
         <!-- Metadata -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 sm:p-8 bg-slate-50/50 dark:bg-slate-800/30 border-b-2 border-slate-200 dark:border-slate-800">
-            <div class="md:col-span-1">
+            <div>
                 <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Project / Sample ID</label>
                 <input type="text" id="projID" oninput="autoSaveData()" class="w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-600 focus:border-blue-700 outline-none text-sm py-1 font-semibold">
             </div>
@@ -90,7 +80,6 @@
         </div>
 
         <div class="p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
             <!-- Left: Table -->
             <div class="lg:col-span-6 space-y-4">
                 <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
@@ -108,11 +97,11 @@
                             </tr>
                         </thead>
                         <tbody id="sieveBody" class="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900/50">
-                            <!-- JS Rows -->
+                            <!-- JS Rows Generated Here -->
                         </tbody>
-                        <tfoot class="bg-slate-50 dark:bg-slate-800 font-bold">
+                        <tfoot class="bg-slate-100 dark:bg-slate-800 font-bold">
                             <tr>
-                                <td colspan="2" class="p-3 text-right text-[10px] uppercase">Pan (Total Wt):</td>
+                                <td colspan="2" class="p-3 text-right text-[10px] uppercase">Pan (Total Sample Wt):</td>
                                 <td class="p-1"><input type="number" id="panWeight" oninput="calculateAnalysis(); autoSaveData();" placeholder="Total g" class="bold-input w-full p-2 bg-blue-50 dark:bg-blue-900/20 outline-none text-center font-mono font-bold text-blue-900 dark:text-blue-400 rounded"></td>
                                 <td class="p-2 text-center text-blue-700 dark:text-blue-400 font-mono" id="panPass">0.0%</td>
                             </tr>
@@ -188,26 +177,35 @@
 
         <!-- Footer -->
         <div class="flex flex-col md:flex-row justify-between items-center p-6 sm:p-8 border-t-2 border-slate-100 dark:border-slate-800 gap-6 no-print">
-            <p class="text-[10px] text-slate-400 font-medium text-center md:text-left leading-relaxed">
-                © 2026 Mohamed Abdelazim • Lab Engineer • E-just
+            <p class="text-[10px] text-slate-500 font-medium text-center md:text-left leading-relaxed italic">
+                © 2026 Mohamed Abdelazim • Lab Engineer • E-just.
             </p>
             <div class="flex w-full sm:w-auto gap-3">
-                <button onclick="exportToCSV()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
-                    CSV
-                </button>
-                <button onclick="window.print()" class="flex-1 sm:flex-none bg-slate-800 dark:bg-blue-700 hover:bg-black dark:hover:bg-blue-600 text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">
-                    PDF
-                </button>
+                <button onclick="exportToCSV()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">CSV</button>
+                <button onclick="window.print()" class="flex-1 sm:flex-none bg-slate-800 dark:bg-blue-700 hover:bg-black dark:hover:bg-blue-600 text-white text-[11px] font-bold py-2.5 px-6 rounded-full transition shadow-lg uppercase tracking-wider">PDF</button>
             </div>
         </div>
     </div>
 
     <script>
+        // Sieve Sizes precisely from the user datasheet
         const sieves = [
-            { label: '3"', mm: 75.0 }, { label: '2"', mm: 50.0 },
-            { label: '1 1/2"', mm: 37.5 }, { label: '1"', mm: 25.0 }, { label: '3/4"', mm: 19.0 },
-            { label: '3/8"', mm: 9.5 }, { label: '#4', mm: 4.75 }, { label: '#10', mm: 2.0 },
-            { label: '#30', mm: 0.6 }, { label: '#40', mm: 0.425 }, { label: '#100', mm: 0.15 }, { label: '#200', mm: 0.075 }
+            { label: '2 in.', mm: 50.0 },
+            { label: '1.5 in.', mm: 37.5 },
+            { label: '1.25 in.', mm: 31.3 },
+            { label: '1 in.', mm: 25.0 },
+            { label: '3/4 in.', mm: 19.0 },
+            { label: '1/2 in.', mm: 12.5 },
+            { label: '3/8 in.', mm: 9.5 },
+            { label: 'No. 4', mm: 4.75 },
+            { label: 'No. 8', mm: 2.36 },
+            { label: 'No. 10', mm: 2.0 },
+            { label: 'No. 16', mm: 1.18 },
+            { label: 'No. 30', mm: 0.6 },
+            { label: 'No. 40', mm: 0.425 },
+            { label: 'No. 50', mm: 0.3 },
+            { label: 'No. 100', mm: 0.15 },
+            { label: 'No. 200', mm: 0.075 }
         ];
 
         let gradationChart;
@@ -230,7 +228,6 @@
             const isDark = document.documentElement.classList.contains('dark');
             const color = isDark ? '#94a3b8' : '#475569';
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
-            
             gradationChart.options.scales.x.ticks.color = color;
             gradationChart.options.scales.y.ticks.color = color;
             gradationChart.options.scales.x.grid.color = gridColor;
@@ -271,13 +268,13 @@
             sieves.forEach((s, i) => {
                 const cumRet = parseFloat(document.getElementById(`cumRet_${i}`).value) || 0;
                 let passing = ((totalWeight - cumRet) / totalWeight) * 100;
-                passing = Math.max(0, passing);
+                passing = Math.max(0, Math.min(100, passing));
                 document.getElementById(`pass_${i}`).innerText = passing.toFixed(1);
                 plotData.push({ x: s.mm, y: passing });
             });
 
-            // Soil Fractions
-            const p3in = getPassAt(75.0, plotData);
+            // Summary Fractions
+            const p3in = 100; // Assuming 100% passes 3" (75mm) as it's not in the list
             const pNo4 = getPassAt(4.75, plotData);
             const pNo200 = getPassAt(0.075, plotData);
 
@@ -287,7 +284,7 @@
             document.getElementById('resPass10').innerText = getPassAt(2.0, plotData).toFixed(1) + "%";
             document.getElementById('resPass40').innerText = getPassAt(0.425, plotData).toFixed(1) + "%";
 
-            // Coefficients
+            // D-Values (Log-Linear Interpolation matching user VBA logic)
             const d10 = getDValue(10, plotData);
             const d30 = getDValue(30, plotData);
             const d60 = getDValue(60, plotData);
@@ -307,11 +304,12 @@
             gradationChart.update();
         }
 
+        // VBA Logic Replication: Log-Linear Interpolation
         function getDValue(targetP, data) {
             for (let i = 1; i < data.length; i++) {
                 const pU = data[i-1].y, pL = data[i].y;
                 const dU = data[i-1].x, dL = data[i].x;
-                if (pU >= targetP && pL <= targetP) {
+                if (pU >= targetP && pL <= targetP && pU !== pL) {
                     const slope = (pU - pL) / (Math.log(dU) - Math.log(dL));
                     return Math.exp(Math.log(dL) + (targetP - pL) / slope);
                 }
@@ -337,7 +335,8 @@
                     scales: {
                         x: { 
                             type: 'logarithmic', reverse: true, min: 0.01, max: 100,
-                            title: { display: true, text: 'Size (mm)', font: { size: 10 } }
+                            title: { display: true, text: 'Size (mm)', font: { size: 10 } },
+                            ticks: { callback: v => v.toString() }
                         },
                         y: { 
                             min: 0, max: 100, title: { display: true, text: 'Passing %', font: { size: 10 } } 
@@ -376,11 +375,11 @@
                 pan: document.getElementById('panWeight').value,
                 rets: sieves.map((_, i) => document.getElementById(`cumRet_${i}`).value)
             };
-            localStorage.setItem('EJUST_SIEVE_CACHE', JSON.stringify(data));
+            localStorage.setItem('EJUST_SIEVE_CACHE_FINAL', JSON.stringify(data));
         }
 
         function loadSavedData() {
-            const cache = localStorage.getItem('EJUST_SIEVE_CACHE');
+            const cache = localStorage.getItem('EJUST_SIEVE_CACHE_FINAL');
             if (!cache) return;
             const data = JSON.parse(cache);
             document.getElementById('projID').value = data.pid || "";
