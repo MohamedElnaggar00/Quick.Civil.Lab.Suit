@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,20 +99,22 @@
 
         <div class="p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
             <!-- Left Side: Input Table -->
-            <div class="lg:col-span-7 space-y-6">
+            <div class="lg:col-span-8 space-y-6">
                 <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                     <div class="h-4 w-1 bg-blue-700"></div>
-                    <h3 class="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Maximum Load Inputs (kN)</h3>
+                    <h3 class="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">Specimen Results</h3>
                 </div>
                 
                 <div class="overflow-hidden border-2 border-slate-200 dark:border-slate-700 rounded-lg shadow-sm">
                     <table class="w-full text-xs text-left">
                         <thead class="bg-slate-800 dark:bg-black text-slate-200 uppercase text-[9px] tracking-widest">
                             <tr>
-                                <th class="p-2 text-center w-10">ID</th>
+                                <th class="p-2 text-center w-8">ID</th>
                                 <th class="p-2">Load (kN)</th>
-                                <th class="p-2 text-center w-10">ID</th>
+                                <th class="p-2 text-blue-400">Stress (MPa)</th>
+                                <th class="p-2 text-center w-8 border-l border-slate-700">ID</th>
                                 <th class="p-2">Load (kN)</th>
+                                <th class="p-2 text-blue-400">Stress (MPa)</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="inputTableBody">
@@ -133,7 +134,7 @@
             </div>
 
             <!-- Right Side: Calculations & Results -->
-            <div class="lg:col-span-5 space-y-6">
+            <div class="lg:col-span-4 space-y-6">
                 <div id="resultPlaceholder" class="h-full min-h-[200px] flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
                     <div class="text-slate-300 dark:text-slate-700 mb-4">
                         <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
@@ -156,15 +157,15 @@
 
                         <div class="space-y-2">
                             <div class="p-2 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded text-[10px]">
-                                <div class="flex justify-between text-slate-500 mb-1 uppercase font-bold text-[8px]"><span>Initial Avg</span><span id="auditInitialAvg">0.00 kN</span></div>
-                                <div id="cycle1Exclusions" class="text-slate-400 italic">...</div>
+                                <div class="flex justify-between text-slate-500 mb-1 uppercase font-bold text-[8px]"><span>Initial Avg Load</span><span id="auditInitialAvg">0.00 kN</span></div>
+                                <div id="cycle1Exclusions" class="text-slate-400 italic">Determining outliers...</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="space-y-3">
                         <div class="bg-blue-900 dark:bg-blue-800 p-5 rounded-xl shadow-inner text-white">
-                            <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest block mb-1">Compressive Strength</span>
+                            <span class="text-[9px] font-bold text-blue-300 uppercase tracking-widest block mb-1">Average Strength</span>
                             <div class="flex items-baseline gap-2">
                                 <span id="stressNmm" class="text-4xl font-black tracking-tighter">0.00</span>
                                 <span class="text-sm font-bold text-blue-300">MPa (N/mm²)</span>
@@ -224,8 +225,11 @@
                 row.innerHTML = `
                     <td class="p-2 text-center bg-slate-50 dark:bg-slate-800/50 font-bold text-slate-400 border-r border-slate-100 dark:border-slate-800">${s1}</td>
                     <td class="p-1 border-r border-slate-100 dark:border-slate-800"><input type="number" id="load${s1}" step="0.01" class="bold-input w-full bg-transparent p-1.5 rounded outline-none font-mono text-sm focus:bg-blue-50 dark:focus:bg-blue-900/20 transition"></td>
+                    <td id="stressRow${s1}" class="p-2 font-mono text-[11px] text-blue-600 dark:text-blue-400 font-bold border-r border-slate-100 dark:border-slate-800 text-center">-</td>
+                    
                     <td class="p-2 text-center bg-slate-50 dark:bg-slate-800/50 font-bold text-slate-400 border-r border-slate-100 dark:border-slate-800">${s2}</td>
-                    <td class="p-1"><input type="number" id="load${s2}" step="0.01" class="bold-input w-full bg-transparent p-1.5 rounded outline-none font-mono text-sm focus:bg-blue-50 dark:focus:bg-blue-900/20 transition"></td>
+                    <td class="p-1 border-r border-slate-100 dark:border-slate-800"><input type="number" id="load${s2}" step="0.01" class="bold-input w-full bg-transparent p-1.5 rounded outline-none font-mono text-sm focus:bg-blue-50 dark:focus:bg-blue-900/20 transition"></td>
+                    <td id="stressRow${s2}" class="p-2 font-mono text-[11px] text-blue-600 dark:text-blue-400 font-bold text-center">-</td>
                 `;
                 tbody.appendChild(row);
             }
@@ -234,19 +238,8 @@
 
         function calculateStress() {
             const dimensionType = document.getElementById('dimensions').value;
-            let rawLoads = [];
-            for (let i = 1; i <= 12; i++) {
-                const val = parseFloat(document.getElementById(`load${i}`).value);
-                if (!isNaN(val) && val > 0) rawLoads.push(val);
-            }
-            if (rawLoads.length === 0) return alert("Enter load values.");
-
-            const getAvg = arr => arr.reduce((a,b) => a+b, 0) / arr.length;
-            const avg1 = getAvg(rawLoads);
-            let passed = [];
-            rawLoads.forEach(l => { if (Math.abs(((l - avg1) / avg1) * 100) <= 20) passed.push(l); });
-            const finalAvgLoad = passed.length > 0 ? getAvg(passed) : 0;
-
+            
+            // 1. Calculate Area
             let areaMm2 = 0;
             if (dimensionType === "150x150") areaMm2 = 22500;
             else if (dimensionType === "100x100") areaMm2 = 10000;
@@ -254,14 +247,63 @@
             else if (dimensionType === "cyl150") areaMm2 = Math.PI * 75 * 75;
             else if (dimensionType === "cyl100") areaMm2 = Math.PI * 50 * 50;
 
-            const stress = (finalAvgLoad * 1000) / areaMm2;
+            let rawLoads = [];
+            
+            // 2. Process individual stresses first
+            for (let i = 1; i <= 12; i++) {
+                const val = parseFloat(document.getElementById(`load${i}`).value);
+                const stressCell = document.getElementById(`stressRow${i}`);
+                
+                if (!isNaN(val) && val > 0) {
+                    rawLoads.push(val);
+                    const indvStress = (val * 1000) / areaMm2;
+                    stressCell.innerText = indvStress.toFixed(2);
+                    stressCell.classList.remove('text-red-500');
+                } else {
+                    stressCell.innerText = "-";
+                }
+            }
+
+            if (rawLoads.length === 0) return alert("Enter load values.");
+
+            // 3. Statistical Cycles (Average and Outlier Check)
+            const getAvg = arr => arr.reduce((a,b) => a+b, 0) / arr.length;
+            const avgLoad1 = getAvg(rawLoads);
+            
+            let passedLoads = [];
+            let excludedCount = 0;
+            
+            rawLoads.forEach((l, index) => { 
+                const deviation = Math.abs(((l - avgLoad1) / avgLoad1) * 100);
+                if (deviation <= 20) {
+                    passedLoads.push(l);
+                } else {
+                    excludedCount++;
+                    // Optional: Highlight the outlier in the table
+                    // We need to find which input it was.
+                }
+            });
+
+            const finalAvgLoad = passedLoads.length > 0 ? getAvg(passedLoads) : 0;
+            const finalStress = (finalAvgLoad * 1000) / areaMm2;
+
+            // 4. Update Result UI
             document.getElementById('displayArea').innerText = areaMm2.toFixed(2) + " mm²";
-            document.getElementById('finalSampleCount').innerText = `${passed.length} / ${rawLoads.length}`;
-            document.getElementById('auditInitialAvg').innerText = avg1.toFixed(2) + " kN";
-            document.getElementById('stressNmm').innerText = stress.toFixed(2);
-            document.getElementById('stressKgcm').innerText = (stress * 10.197).toFixed(2);
+            document.getElementById('finalSampleCount').innerText = `${passedLoads.length} / ${rawLoads.length}`;
+            document.getElementById('auditInitialAvg').innerText = avgLoad1.toFixed(2) + " kN";
+            
+            const exclusionText = document.getElementById('cycle1Exclusions');
+            exclusionText.innerText = excludedCount > 0 
+                ? `${excludedCount} outlier(s) (>20% dev) excluded.` 
+                : "All samples within 20% deviation range.";
+            exclusionText.className = excludedCount > 0 ? "text-amber-500 font-bold italic" : "text-emerald-500 italic";
+
+            document.getElementById('stressNmm').innerText = finalStress.toFixed(2);
+            document.getElementById('stressKgcm').innerText = (finalStress * 10.197).toFixed(2);
+            
             document.getElementById('resultPlaceholder').classList.add('hidden');
             document.getElementById('resultDisplay').classList.remove('hidden');
+            
             autoSaveData();
         }
 
@@ -269,12 +311,14 @@
             let csv = ["COMPRESSIVE STRENGTH REPORT"];
             csv.push(`Project,${document.getElementById('projName').value || 'N/A'}`);
             csv.push(`Date,${document.getElementById('testDate').value || 'N/A'}`);
-            csv.push(`Area,${document.getElementById('displayArea').innerText}`);
-            csv.push(`Strength (MPa),${document.getElementById('stressNmm').innerText}`);
+            csv.push(`Area (mm2),${document.getElementById('displayArea').innerText.replace(' mm²', '')}`);
+            csv.push(`Avg Strength (MPa),${document.getElementById('stressNmm').innerText}`);
             csv.push("");
-            csv.push("Sample ID,Load (kN)");
+            csv.push("Sample ID,Load (kN),Stress (MPa)");
             for(let i=1; i<=12; i++) {
-                csv.push(`${i},${document.getElementById('load'+i).value || 0}`);
+                const load = document.getElementById('load'+i).value || 0;
+                const stress = document.getElementById('stressRow'+i).innerText;
+                csv.push(`${i},${load},${stress}`);
             }
             const blob = new Blob([csv.join("\n")], { type: 'text/csv' });
             const a = document.createElement('a');
